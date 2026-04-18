@@ -142,25 +142,25 @@ export function ChatWidget() {
   }
 
   return (
-    <div className="fixed bottom-5 right-5 z-50 md:bottom-6 md:right-6">
+    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
       {isOpen ? (
-        <div className="mb-3 flex h-[600px] w-[360px] max-w-[calc(100vw-1.5rem)] flex-col overflow-hidden rounded-[2rem] border border-white/60 bg-[#fff9f4] shadow-[0_30px_90px_-28px_rgba(46,36,31,0.48)]">
-          <div className="border-b border-foreground/10 bg-[#2e241f] px-5 py-4 text-white">
+        <div className="mb-2 flex h-[600px] w-[380px] max-w-[calc(100vw-3rem)] flex-col overflow-hidden rounded-2xl border border-border/40 bg-card/95 backdrop-blur shadow-2xl">
+          <div className="border-b border-border/40 bg-primary px-6 py-4 text-primary-foreground">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-xs uppercase tracking-[0.24em] text-white/70">Atelier chat</p>
-                <p className="mt-2 font-display text-3xl leading-none">{BRAND_NAME}</p>
+                <p className="text-xs uppercase tracking-widest text-primary-foreground/80">Asesor</p>
+                <p className="mt-2 font-display text-2xl leading-tight">{BRAND_NAME}</p>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
                 <button
                   type="button"
                   onClick={resetChat}
-                  className="inline-flex items-center gap-1 rounded-full border border-white/12 px-3 py-1.5 text-xs text-white/82 hover:bg-white/10"
+                  className="inline-flex items-center gap-1 rounded-lg border border-primary-foreground/20 px-2.5 py-1.5 text-xs text-primary-foreground/80 hover:bg-primary-foreground/10 transition-colors"
+                  title="Reiniciar chat"
                 >
-                  <RotateCcw size={12} />
-                  Reiniciar
+                  <RotateCcw size={14} />
                 </button>
-                <button type="button" onClick={() => setIsOpen(false)} aria-label="Cerrar chat">
+                <button type="button" onClick={() => setIsOpen(false)} aria-label="Cerrar chat" className="p-1">
                   <X size={18} />
                 </button>
               </div>
@@ -169,7 +169,7 @@ export function ChatWidget() {
 
           <div
             ref={messagesContainerRef}
-            className="flex-1 space-y-3 overflow-y-auto bg-[linear-gradient(180deg,#fffaf6_0%,#f8efe6_100%)] p-4"
+            className="flex-1 space-y-3 overflow-y-auto bg-background/50 p-4"
             onScroll={() => {
               shouldAutoScrollRef.current = isNearBottom()
             }}
@@ -177,25 +177,25 @@ export function ChatWidget() {
             {messages.map((message, index) => (
               <div
                 key={`${message.role}-${index}`}
-                className={`max-w-[88%] rounded-[1.4rem] px-4 py-3 text-sm leading-6 ${
+                className={`max-w-[82%] rounded-lg px-4 py-2.5 text-sm leading-relaxed ${
                   message.role === "user"
-                    ? "ml-auto bg-foreground text-background"
-                    : "border border-foreground/8 bg-white text-foreground"
+                    ? "ml-auto bg-primary text-primary-foreground"
+                    : "border border-border/60 bg-card text-foreground"
                 } whitespace-pre-line`}
               >
                 {renderMessageText(message.text)}
               </div>
             ))}
-            {loading ? <p className="text-xs text-muted-foreground">Escribiendo...</p> : null}
+            {loading ? <p className="text-xs text-muted-foreground italic">Escribiendo...</p> : null}
             <div ref={bottomRef} aria-hidden="true" />
           </div>
 
-          <div className="border-t border-foreground/10 bg-white/75 p-4">
-            <div className="mb-3 flex flex-wrap gap-2">
+          <div className="border-t border-border/40 bg-card/70 backdrop-blur-sm p-4 space-y-3">
+            <div className="flex flex-wrap gap-2">
               {QUICK_ACTIONS.map((action) => (
                 <button
                   key={action}
-                  className="rounded-full border border-foreground/10 bg-white px-3 py-1.5 text-xs text-foreground transition-colors hover:bg-secondary"
+                  className="rounded-lg border border-border/60 bg-card px-3 py-1.5 text-xs text-foreground transition-all hover:bg-muted/40 text-center"
                   onClick={() => sendMessage(action)}
                   disabled={loading}
                 >
@@ -212,14 +212,14 @@ export function ChatWidget() {
               }}
             >
               <input
-                className="h-11 flex-1 rounded-full border border-foreground/10 bg-white px-4 text-sm outline-none"
+                className="h-10 flex-1 rounded-lg border border-border/60 bg-muted/30 px-4 text-sm outline-none placeholder-muted-foreground focus:border-border transition-colors"
                 value={input}
                 onChange={(event) => setInput(event.target.value)}
-                placeholder="Escribe tu consulta"
+                placeholder="Tu consulta..."
                 disabled={loading}
               />
               <button
-                className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-primary text-primary-foreground"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground hover:shadow-md transition-all disabled:opacity-50"
                 disabled={loading}
               >
                 <Send size={16} />
@@ -234,11 +234,11 @@ export function ChatWidget() {
           shouldAutoScrollRef.current = true
           setIsOpen((prev) => !prev)
         }}
-        className="inline-flex items-center gap-3 rounded-full bg-foreground px-5 py-3 text-sm font-semibold text-background shadow-lg"
+        className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-lg hover:shadow-xl transition-all hover:scale-105"
         aria-label="Abrir chat"
       >
         <MessageCircle size={18} />
-        Asesor atelier
+        <span className="hidden sm:inline">Asesor</span>
       </button>
     </div>
   )

@@ -9,29 +9,38 @@ import {
 } from "@/components/ui/accordion"
 
 export const metadata: Metadata = {
-  title: "Preguntas frecuentes",
-  description: "FAQ demo sobre catálogo, reservas y chatbot de Casa Bruna.",
+  title: "FAQ",
+  description: "Preguntas frecuentes sobre Casa Bruna: sabores, formatos, reservas y envios.",
 }
 
 export default function FaqPage() {
   return (
-    <section className="pb-20 pt-10 md:pb-24 md:pt-14">
+    <section className="pb-20 pt-12 md:pb-28 md:pt-16">
       <div className="page-shell">
-        <div className="paper-panel p-6 md:p-8">
-          <p className="text-xs uppercase tracking-[0.26em] text-muted-foreground">
-            Dudas frecuentes
-          </p>
-          <h1 className="mt-3 font-display text-5xl leading-none text-foreground md:text-6xl">
-            FAQ de la demo
-          </h1>
+        <div className="max-w-3xl mx-auto space-y-8">
+          <div className="space-y-4">
+            <p className="text-xs uppercase tracking-widest text-muted-foreground">
+              Preguntas y respuestas
+            </p>
+            <h1 className="font-display text-4xl md:text-5xl leading-tight text-foreground">
+              Dudas frecuentes.
+            </h1>
+            <p className="text-base text-foreground/75 leading-relaxed">
+              Todo lo que necesitas saber sobre sabores, formatos, reservas y entregas en Casa Bruna.
+            </p>
+          </div>
 
-          <Accordion type="single" collapsible className="mt-8 w-full">
+          <Accordion type="single" collapsible className="w-full space-y-3">
             {faqs.map((faq, index) => (
-              <AccordionItem key={faq.question} value={`faq-${index}`}>
-                <AccordionTrigger className="text-left text-base font-semibold text-foreground">
+              <AccordionItem 
+                key={faq.question} 
+                value={`faq-${index}`}
+                className="editorial-panel border px-6 py-4 md:px-7 md:py-5"
+              >
+                <AccordionTrigger className="text-left text-base md:text-lg font-semibold text-foreground hover:text-primary transition-colors py-0">
                   {faq.question}
                 </AccordionTrigger>
-                <AccordionContent className="text-sm leading-7 text-muted-foreground">
+                <AccordionContent className="text-sm leading-7 text-foreground/75 pt-4">
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>

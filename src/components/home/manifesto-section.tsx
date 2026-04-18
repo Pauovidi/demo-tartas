@@ -3,91 +3,96 @@ import Link from "next/link"
 import {
   BRAND_EMAIL,
   BRAND_LOCATION,
-  DEMO_DISCLAIMER,
   STORE_HOURS_INLINE_TEXT,
 } from "@/src/data/business"
 
-const pillars = [
+const values = [
   {
-    title: "Ritmo editorial",
-    text: "La home deja la narrativa de galería y se mueve hacia una boutique cálida, con bloques tipo revista, tarjetas de detalle y más aire entre secciones.",
+    label: "Calidad artesanal",
+    description: "Cada pieza horneada lentamente con ingredientes premium, sin prisas.",
   },
   {
-    title: "Operativa visible",
-    text: "Se mantiene la base técnica de reserva, catálogo y chatbot, pero el lenguaje comercial se ha reescrito para una colección demo segura y coherente.",
+    label: "Formatos editables",
+    description: "Mesa o Petit. Personaliza sabor, tamaño y cantidad según tu ocasión.",
   },
   {
-    title: "Datos neutralizados",
-    text: "Contacto, legales, FAQ, metadatos, soportes de WhatsApp y copies de atención se han sustituido por placeholders y valores demo no identificables.",
+    label: "Recogida concertada",
+    description: "Sin envíos. Coordinamos la retirada con una ventana de producción clara.",
   },
 ]
 
 export function ManifestoSection() {
   return (
-    <section id="atelier-contact" className="pb-14 pt-2 md:pb-20">
-      <div className="page-shell grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
-        <div className="paper-panel p-6 md:p-8">
-          <p className="text-xs uppercase tracking-[0.26em] text-muted-foreground">
-            Cómo está pensada la demo
-          </p>
-          <h2 className="mt-4 max-w-xl font-display text-4xl leading-none text-foreground md:text-5xl">
-            Una misma base técnica, otra forma de presentarla.
-          </h2>
-          <p className="mt-5 max-w-xl text-sm leading-7 text-muted-foreground md:text-base">
-            Esta demo prioriza una lectura más comercial y más modular: reserva guiada, piezas
-            destacadas, narrativa breve y un pie claro para portfolio sin rastro de identidad real.
-          </p>
+    <section id="about" className="py-16 md:py-24 border-b border-border/40">
+      <div className="page-shell space-y-12">
+        <div className="grid gap-8 lg:gap-12 lg:grid-cols-2">
+          <div className="space-y-6">
+            <div className="space-y-3">
+              <p className="text-xs uppercase tracking-widest text-muted-foreground">
+                Sobre Casa Bruna
+              </p>
+              <h2 className="font-display text-4xl md:text-5xl leading-tight text-foreground">
+                Horneado lento para sobremesas memorables.
+              </h2>
+            </div>
+            <p className="text-base leading-relaxed text-muted-foreground max-w-xl">
+              Casa Bruna es un atelier de pasteles y cheesecakes donde cada fórmula se ha pensado para las mesas que importan. Colección editorial, producción acotada, reserva anticipada.
+            </p>
+          </div>
 
-          <div className="mt-8 space-y-3">
-            {pillars.map((pillar) => (
+          <div className="grid gap-4 md:gap-5">
+            {values.map((value) => (
               <div
-                key={pillar.title}
-                className="rounded-[1.5rem] border border-foreground/8 bg-white/80 p-5"
+                key={value.label}
+                className="editorial-panel border p-5 md:p-6 space-y-2"
               >
-                <h3 className="text-lg font-semibold text-foreground">{pillar.title}</h3>
-                <p className="mt-2 text-sm leading-6 text-muted-foreground">{pillar.text}</p>
+                <p className="font-semibold text-foreground text-sm md:text-base">{value.label}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">{value.description}</p>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="grid gap-6">
-          <div className="paper-panel p-6 md:p-8">
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="rounded-[1.75rem] bg-[#2e241f] p-6 text-white">
-                <p className="text-xs uppercase tracking-[0.24em] text-white/70">Atención</p>
-                <p className="mt-3 font-display text-3xl">Reservas, dudas y sabores</p>
-                <p className="mt-3 text-sm leading-6 text-white/70">
-                  El launcher conversacional y el flujo de checkout siguen activos para demostrar
-                  la experiencia de pedido.
-                </p>
-              </div>
-              <div className="rounded-[1.75rem] border border-foreground/10 bg-white/85 p-6">
-                <p className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
-                  Datos demo
-                </p>
-                <p className="mt-3 text-sm leading-6 text-foreground">{BRAND_LOCATION}</p>
-                <p className="mt-1 text-sm leading-6 text-foreground">{BRAND_EMAIL}</p>
-                <p className="mt-3 text-sm leading-6 text-muted-foreground">
-                  {STORE_HOURS_INLINE_TEXT}
-                </p>
-              </div>
+        <div className="grid gap-6 md:gap-8 lg:grid-cols-3">
+          <div className="editorial-panel border-accent/40 border-l-4 p-6 md:p-8 bg-accent/5 space-y-4">
+            <div>
+              <p className="text-xs uppercase tracking-widest text-accent font-semibold mb-2">
+                Ubicación
+              </p>
+              <p className="text-sm font-medium text-foreground">{BRAND_LOCATION}</p>
+            </div>
+            <div>
+              <p className="text-xs uppercase tracking-widest text-accent font-semibold mb-2">
+                Contacto
+              </p>
+              <p className="text-sm text-foreground/80">{BRAND_EMAIL}</p>
+            </div>
+            <div>
+              <p className="text-xs uppercase tracking-widest text-accent font-semibold mb-2">
+                Horario
+              </p>
+              <p className="text-sm text-foreground/80">{STORE_HOURS_INLINE_TEXT}</p>
             </div>
           </div>
 
-          <div className="paper-panel p-6 md:p-8">
-            <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
-              <div>
-                <p className="text-xs uppercase tracking-[0.24em] text-primary">Portfolio-safe</p>
-                <p className="mt-3 max-w-xl text-sm leading-7 text-muted-foreground">
-                  {DEMO_DISCLAIMER}
-                </p>
-              </div>
+          <div className="lg:col-span-2 editorial-panel p-6 md:p-8 space-y-4">
+            <div className="space-y-2">
+              <p className="text-xs uppercase tracking-widest text-muted-foreground">
+                Acerca de esta demo
+              </p>
+              <p className="font-display text-2xl md:text-3xl text-foreground">
+                Portfolio-safe y completamente funcional
+              </p>
+            </div>
+            <p className="text-sm leading-relaxed text-muted-foreground max-w-2xl">
+              Esta demostración preserva la base técnica de reserva, catálogo y checkout del proyecto original, pero con marca, datos, imágenes y copy completamente neutralizados y reorganizados para un portfolio seguro.
+            </p>
+            <div className="pt-4 border-t border-border/40">
               <Link
                 href="/faqs"
-                className="inline-flex items-center justify-center rounded-full border border-foreground/12 bg-white px-5 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-secondary"
+                className="inline-flex items-center justify-center rounded-lg border border-border/60 bg-card px-6 py-2.5 text-sm font-semibold text-foreground transition-all hover:bg-muted/40"
               >
-                Revisar preguntas frecuentes
+                Leer preguntas frecuentes →
               </Link>
             </div>
           </div>
