@@ -37,7 +37,7 @@ export const products: Product[] = [
     fullDescription: "Formato Petit de 450 g. Textura cremosa, vainilla natural y final tostado.",
     portionInfo: "2-3 raciones",
     weightInfo: "450 g",
-    images: ["/images/products/vainilla-tostada.svg"],
+    images: ["/images/products/vainilla-tostada.jpg"],
     featured: true,
   },
   {
@@ -52,7 +52,7 @@ export const products: Product[] = [
     fullDescription: "Formato Petit de 450 g. Intensidad de pistacho y acabado suave.",
     portionInfo: "2-3 raciones",
     weightInfo: "450 g",
-    images: ["/images/products/pistacho-verde.svg"],
+    images: ["/images/products/pistacho-verde.jpg"],
     featured: true,
   },
   {
@@ -67,7 +67,7 @@ export const products: Product[] = [
     fullDescription: "Formato Petit de 450 g. Queso cremoso, cacao intenso y acabado ahumado.",
     portionInfo: "2-3 raciones",
     weightInfo: "450 g",
-    images: ["/images/products/cacao-ahumado.svg"],
+    images: ["/images/products/cacao-ahumado.jpg"],
     featured: true,
   },
   {
@@ -82,7 +82,7 @@ export const products: Product[] = [
     fullDescription: "Formato Petit de 450 g. Más cítrico, ligero y muy cremoso.",
     portionInfo: "2-3 raciones",
     weightInfo: "450 g",
-    images: ["/images/products/limon-crema.svg"],
+    images: ["/images/products/limon-crema.jpg"],
     featured: false,
   },
   {
@@ -97,7 +97,7 @@ export const products: Product[] = [
     fullDescription: "Formato Petit de 450 g. Dulzor delicado y fondo floral.",
     portionInfo: "2-3 raciones",
     weightInfo: "450 g",
-    images: ["/images/products/higo-miel.svg"],
+    images: ["/images/products/higo-miel.jpg"],
     featured: false,
   },
   {
@@ -112,7 +112,7 @@ export const products: Product[] = [
     fullDescription: "Formato Petit de 450 g. Perfil redondo y tostado.",
     portionInfo: "2-3 raciones",
     weightInfo: "450 g",
-    images: ["/images/products/cafe-avellana.svg"],
+    images: ["/images/products/cafe-avellana.jpg"],
     featured: false,
   },
   {
@@ -127,7 +127,7 @@ export const products: Product[] = [
     fullDescription: "Formato Petit de 450 g. Brillante, cítrico y elegante.",
     portionInfo: "2-3 raciones",
     weightInfo: "450 g",
-    images: ["/images/products/mandarina-salvia.svg"],
+    images: ["/images/products/mandarina-salvia.jpg"],
     featured: false,
   },
   {
@@ -142,7 +142,7 @@ export const products: Product[] = [
     fullDescription: "Formato Petit de 450 g. Fruta roja, dulzor fino y textura densa.",
     portionInfo: "2-3 raciones",
     weightInfo: "450 g",
-    images: ["/images/products/frambuesa-blanca.svg"],
+    images: ["/images/products/frambuesa-blanca.jpg"],
     featured: false,
   },
   {
@@ -157,7 +157,7 @@ export const products: Product[] = [
     fullDescription: "Formato Petit de 450 g. Dulzor envolvente y textura de horno lento.",
     portionInfo: "2-3 raciones",
     weightInfo: "450 g",
-    images: ["/images/products/caramelo-marino.svg"],
+    images: ["/images/products/caramelo-marino.jpg"],
     featured: false,
   },
   {
@@ -175,7 +175,7 @@ export const products: Product[] = [
     fullDescription: "Formato Mesa de 1,8 kg. 10-12 raciones. Vainilla natural y borde tostado.",
     portionInfo: "10-12 raciones",
     weightInfo: "1,8 kg",
-    images: ["/images/products/vainilla-tostada.svg"],
+    images: ["/images/products/vainilla-tostada.jpg"],
     featured: true,
   },
   {
@@ -193,7 +193,7 @@ export const products: Product[] = [
     fullDescription: "Formato Mesa de 1,8 kg. 10-12 raciones. Pistacho tostado y textura aterciopelada.",
     portionInfo: "10-12 raciones",
     weightInfo: "1,8 kg",
-    images: ["/images/products/pistacho-verde.svg"],
+    images: ["/images/products/pistacho-verde.jpg"],
     featured: true,
   },
   {
@@ -211,7 +211,7 @@ export const products: Product[] = [
     fullDescription: "Formato Mesa de 1,8 kg. 10-12 raciones. Cacao intenso y tostado fino.",
     portionInfo: "10-12 raciones",
     weightInfo: "1,8 kg",
-    images: ["/images/products/cacao-ahumado.svg"],
+    images: ["/images/products/cacao-ahumado.jpg"],
     featured: true,
   },
   {
@@ -229,7 +229,7 @@ export const products: Product[] = [
     fullDescription: "Formato Mesa de 1,8 kg. 10-12 raciones. Limón confitado y base fina.",
     portionInfo: "10-12 raciones",
     weightInfo: "1,8 kg",
-    images: ["/images/products/limon-crema.svg"],
+    images: ["/images/products/limon-crema.jpg"],
     featured: false,
   },
   {
@@ -247,7 +247,7 @@ export const products: Product[] = [
     fullDescription: "Formato Mesa de 1,8 kg. 10-12 raciones. Miel floral e higo maduro.",
     portionInfo: "10-12 raciones",
     weightInfo: "1,8 kg",
-    images: ["/images/products/higo-miel.svg"],
+    images: ["/images/products/higo-miel.jpg"],
     featured: false,
   },
   {
@@ -265,7 +265,7 @@ export const products: Product[] = [
     fullDescription: "Formato Mesa de 1,8 kg. 10-12 raciones. Café suave y fondo tostado.",
     portionInfo: "10-12 raciones",
     weightInfo: "1,8 kg",
-    images: ["/images/products/cafe-avellana.svg"],
+    images: ["/images/products/cafe-avellana.jpg"],
     featured: false,
   },
   {
@@ -283,7 +283,7 @@ export const products: Product[] = [
     fullDescription: "Formato Mesa de 1,8 kg. 10-12 raciones. Mandarina fresca y salvia suave.",
     portionInfo: "10-12 raciones",
     weightInfo: "1,8 kg",
-    images: ["/images/products/mandarina-salvia.svg"],
+    images: ["/images/products/mandarina-salvia.jpg"],
     featured: false,
   },
   {
@@ -301,7 +301,7 @@ export const products: Product[] = [
     fullDescription: "Formato Mesa de 1,8 kg. 10-12 raciones. Frambuesa y crema blanca.",
     portionInfo: "10-12 raciones",
     weightInfo: "1,8 kg",
-    images: ["/images/products/frambuesa-blanca.svg"],
+    images: ["/images/products/frambuesa-blanca.jpg"],
     featured: false,
   },
   {
@@ -319,7 +319,7 @@ export const products: Product[] = [
     fullDescription: "Formato Mesa de 1,8 kg. 10-12 raciones. Caramelo delicado y sal marina.",
     portionInfo: "10-12 raciones",
     weightInfo: "1,8 kg",
-    images: ["/images/products/caramelo-marino.svg"],
+    images: ["/images/products/caramelo-marino.jpg"],
     featured: false,
   },
 ]
