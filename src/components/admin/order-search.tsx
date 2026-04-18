@@ -52,7 +52,7 @@ export function AdminOrderSearch() {
 
       if (!response.ok) {
         setResults([])
-        setErrorMessage(response.error)
+        setErrorMessage(response.error ?? "No se pudo buscar el pedido")
         return
       }
 

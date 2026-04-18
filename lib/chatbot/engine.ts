@@ -728,9 +728,14 @@ export async function handleMessage({ sessionId, message, phone, channel }: Hand
       return saveAndReply(userId, buildContextualOrderReply(state, channel, SHOP_TZ), state)
     }
 
-    const confirmedCustomerName = state.customerName
+    const confirmedCustomerName = state.customerName?.trim()
+    if (!confirmedCustomerName) {
+      state.awaitingName = true
+      return saveAndReply(userId, buildContextualOrderReply(state, channel, SHOP_TZ), state)
+    }
+
     const created = await createChatOrder({
-      customer_name: confirmedCustomerName.trim(),
+      customer_name: confirmedCustomerName,
       customer_email: state.customerEmail,
       phone: state.phone,
       delivery_date: state.finalDate,
@@ -764,18 +769,21 @@ export async function handleMessage({ sessionId, message, phone, channel }: Hand
       type: "function",
       name: "get_store_hours",
       description: "Devuelve horario de tienda",
+      strict: true,
       parameters: { type: "object", properties: {}, additionalProperties: false },
     },
     {
       type: "function",
       name: "get_flavors_and_sizes",
       description: "Lista sabores y los dos tamaños por sabor",
+      strict: true,
       parameters: { type: "object", properties: {}, additionalProperties: false },
     },
     {
       type: "function",
       name: "get_product_info",
       description: "Da ingredientes y alérgenos confirmados por sabor o slug",
+      strict: true,
       parameters: {
         type: "object",
         properties: { query: { type: "string" } },
@@ -787,6 +795,7 @@ export async function handleMessage({ sessionId, message, phone, channel }: Hand
       type: "function",
       name: "create_order",
       description: "Crea pedido",
+      strict: true,
       parameters: {
         type: "object",
         properties: {
@@ -817,6 +826,7 @@ export async function handleMessage({ sessionId, message, phone, channel }: Hand
       type: "function",
       name: "cancel_order",
       description: "Cancela pedido por teléfono",
+      strict: true,
       parameters: {
         type: "object",
         properties: {
@@ -831,6 +841,7 @@ export async function handleMessage({ sessionId, message, phone, channel }: Hand
       type: "function",
       name: "handoff_to_human",
       description: "Deriva conversación a humano y pausa bot",
+      strict: true,
       parameters: {
         type: "object",
         properties: { reason: { type: "string" } },

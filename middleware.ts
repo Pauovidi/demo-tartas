@@ -36,18 +36,17 @@ export async function middleware(request: NextRequest) {
   })
 
   const {
-    data: { session },
-  } = await supabase.auth.getSession()
+    data: { user },
+  } = await supabase.auth.getUser()
 
-  if (!session) {
+  if (!user) {
     return NextResponse.redirect(new URL("/admin/login", request.url))
   }
 
   const adminEmail = process.env.ADMIN_EMAIL?.toLowerCase()
-  const currentEmail = session.user.email?.toLowerCase()
+  const currentEmail = user.email?.toLowerCase()
 
   if (!adminEmail || currentEmail !== adminEmail) {
-    await supabase.auth.signOut()
     return NextResponse.redirect(new URL("/admin/login?error=not_authorized", request.url))
   }
 
