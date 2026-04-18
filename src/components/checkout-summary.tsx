@@ -10,7 +10,13 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { earliestPickupDateISO, formatDateEs } from "@/lib/chatbot/date-rules"
 import { getOrderPickupDateErrorMessage, validateOrderPickupDate } from "@/lib/pickup-date-validation"
-import { CLOSED_PICKUP_DAYS_COPY, getCustomerFacingFormatLabel, PICKUP_ONLY_COPY } from "@/src/data/business"
+import {
+  BRAND_NAME,
+  CLOSED_PICKUP_DAYS_COPY,
+  DEMO_DISCLAIMER,
+  getCustomerFacingFormatLabel,
+  PICKUP_ONLY_COPY,
+} from "@/src/data/business"
 import { useCart } from "@/src/context/cart-context"
 
 const checkoutSchema = z.object({
@@ -49,19 +55,26 @@ export function CheckoutSummary({ leadDays, shopTimeZone }: CheckoutSummaryProps
     () => earliestPickupDateISO(new Date(), leadDays, shopTimeZone),
     [leadDays, shopTimeZone]
   )
-  const pickupDateHelpText = `Elige una fecha de recogida obligatoria. Necesitamos mínimo ${leadDays} días de antelación y ${CLOSED_PICKUP_DAYS_COPY}. Primera fecha disponible: ${formatDateEs(earliestPickupDate, shopTimeZone)}.`
+  const pickupDateHelpText = `Reserva con mínimo ${leadDays} días de antelación y ten en cuenta que ${CLOSED_PICKUP_DAYS_COPY}. Primera fecha disponible: ${formatDateEs(earliestPickupDate, shopTimeZone)}.`
 
   if (items.length === 0) {
     return (
-      <div className="flex flex-col items-center gap-6 py-12">
-        <p className="text-sm text-muted-foreground">Tu carrito está vacío.</p>
-        <Link
-          href="/productos"
-          className="border border-foreground px-8 py-3.5 text-xs font-bold uppercase tracking-[0.2em] text-foreground transition-colors hover:bg-foreground hover:text-background"
-        >
-          Ver productos
-        </Link>
-      </div>
+      <section className="pb-20 pt-12 md:pb-24 md:pt-16">
+        <div className="page-shell">
+          <div className="paper-panel flex flex-col items-center gap-6 py-14 text-center">
+            <p className="font-display text-4xl text-foreground">No hay piezas en el pedido.</p>
+            <p className="max-w-lg text-sm leading-7 text-muted-foreground">
+              Añade primero una selección desde catálogo para probar el flujo completo de checkout.
+            </p>
+            <Link
+              href="/productos"
+              className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground"
+            >
+              Ir a colección
+            </Link>
+          </div>
+        </div>
+      </section>
     )
   }
 
@@ -134,7 +147,7 @@ export function CheckoutSummary({ leadDays, shopTimeZone }: CheckoutSummaryProps
 
       clearCart()
       const finalDate = data.delivery_date_final as string | undefined
-      toast.success(`Pedido creado para ${finalDate}. ${PICKUP_ONLY_COPY}`)
+      toast.success(`Pedido demo creado para ${finalDate}. ${PICKUP_ONLY_COPY}`)
       router.push("/")
       router.refresh()
     } catch (error) {
@@ -146,81 +159,116 @@ export function CheckoutSummary({ leadDays, shopTimeZone }: CheckoutSummaryProps
   }
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="grid gap-4 rounded-md border border-border p-4 md:grid-cols-2">
-        <div className="space-y-2">
-          <Label htmlFor="customer-name">Nombre *</Label>
-          <Input
-            id="customer-name"
-            value={customerName}
-            onChange={(e) => setCustomerName(e.target.value)}
-            placeholder="Tu nombre"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="customer-phone">Teléfono *</Label>
-          <Input
-            id="customer-phone"
-            required
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            placeholder="600123123"
-          />
-        </div>
-        <div className="space-y-2 md:col-span-2">
-          <Label htmlFor="delivery-date">¿Para qué fecha quieres recoger el pedido? *</Label>
-          <Input
-            id="delivery-date"
-            type="date"
-            required
-            min={earliestPickupDate}
-            value={deliveryDate}
-            aria-invalid={deliveryDateError ? "true" : "false"}
-            onChange={(e) => handleDeliveryDateChange(e.target.value)}
-          />
-          <p className={`text-xs ${deliveryDateError ? "text-destructive" : "text-muted-foreground"}`}>
-            {deliveryDateError ?? pickupDateHelpText}
-          </p>
-        </div>
-      </div>
-
-      <div className="border-b border-border pb-6">
-        {items.map((item) => (
-          <div
-            key={item.product.id}
-            className="flex items-center justify-between border-t border-border py-4 first:border-0"
-          >
-            <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-foreground">
-                {item.product.name}
-              </p>
-              <p className="mt-1 text-xs text-muted-foreground">
-                {getCustomerFacingFormatLabel(item.product.format)} · Cantidad: {item.quantity}
-              </p>
-            </div>
-            <p className="text-sm font-medium text-foreground">
-              {(item.product.priceValue * item.quantity).toFixed(2)}€
+    <section className="pb-20 pt-10 md:pb-24 md:pt-14">
+      <div className="page-shell grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+        <div className="space-y-6">
+          <div className="paper-panel p-6 md:p-8">
+            <p className="text-xs uppercase tracking-[0.26em] text-muted-foreground">
+              Checkout demo
+            </p>
+            <h1 className="mt-3 font-display text-5xl leading-none text-foreground md:text-6xl">
+              Reserva tu selección
+            </h1>
+            <p className="mt-4 text-sm leading-7 text-muted-foreground">
+              {BRAND_NAME} utiliza aquí el mismo flujo técnico de validación, carrito y creación de
+              pedido, pero con marca, datos y copy ficticios.
             </p>
           </div>
-        ))}
+
+          <div className="paper-panel p-6 md:p-8">
+            <div className="grid gap-5">
+              <div className="space-y-2">
+                <Label htmlFor="customer-name">Nombre *</Label>
+                <Input
+                  id="customer-name"
+                  value={customerName}
+                  onChange={(e) => setCustomerName(e.target.value)}
+                  placeholder="Nombre para la reserva demo"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="customer-phone">Teléfono *</Label>
+                <Input
+                  id="customer-phone"
+                  required
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="600 000 000"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="delivery-date">Fecha de recogida *</Label>
+                <Input
+                  id="delivery-date"
+                  type="date"
+                  required
+                  min={earliestPickupDate}
+                  value={deliveryDate}
+                  aria-invalid={deliveryDateError ? "true" : "false"}
+                  onChange={(e) => handleDeliveryDateChange(e.target.value)}
+                />
+                <p className={`text-xs ${deliveryDateError ? "text-destructive" : "text-muted-foreground"}`}>
+                  {deliveryDateError ?? pickupDateHelpText}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-6">
+          <div className="paper-panel p-6 md:p-8">
+            <div className="flex items-center justify-between">
+              <p className="text-xs uppercase tracking-[0.26em] text-muted-foreground">
+                Resumen del pedido
+              </p>
+              <span className="rounded-full bg-secondary px-3 py-1 text-xs font-medium text-foreground">
+                {items.length} líneas
+              </span>
+            </div>
+
+            <div className="mt-5 space-y-4">
+              {items.map((item) => (
+                <div
+                  key={item.product.id}
+                  className="rounded-[1.5rem] border border-foreground/10 bg-white/80 p-4"
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <p className="text-lg font-semibold text-foreground">{item.product.name}</p>
+                      <p className="mt-1 text-sm text-muted-foreground">
+                        {getCustomerFacingFormatLabel(item.product.format)} · Cantidad: {item.quantity}
+                      </p>
+                    </div>
+                    <p className="text-sm font-semibold text-foreground">
+                      {(item.product.priceValue * item.quantity).toFixed(2)} €
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="soft-divider mt-6 h-px w-full" />
+            <div className="mt-6 flex items-center justify-between">
+              <span className="text-sm font-semibold text-muted-foreground">Total</span>
+              <span className="text-2xl font-semibold text-foreground">{subtotal.toFixed(2)} €</span>
+            </div>
+
+            <button
+              onClick={handleConfirmOrder}
+              disabled={loading}
+              className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {loading ? "Creando pedido demo..." : "Confirmar pedido demo"}
+            </button>
+          </div>
+
+          <div className="paper-panel p-6 md:p-8">
+            <p className="text-xs uppercase tracking-[0.26em] text-primary">Nota importante</p>
+            <p className="mt-3 text-sm leading-7 text-muted-foreground">{PICKUP_ONLY_COPY}</p>
+            <p className="mt-3 text-sm leading-7 text-muted-foreground">{DEMO_DISCLAIMER}</p>
+          </div>
+        </div>
       </div>
-
-      <div className="flex items-center justify-between">
-        <span className="text-sm font-bold uppercase tracking-wider text-foreground">Total</span>
-        <span className="text-lg font-bold text-foreground">{subtotal.toFixed(2)}€</span>
-      </div>
-
-      <button
-        onClick={handleConfirmOrder}
-        disabled={loading}
-        className="w-full bg-primary py-3.5 text-xs font-bold uppercase tracking-[0.2em] text-primary-foreground transition-opacity hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-50"
-      >
-        {loading ? "Creando pedido..." : "Confirmar pedido"}
-      </button>
-
-      <p className="text-center text-xs text-muted-foreground">
-        {PICKUP_ONLY_COPY}
-      </p>
-    </div>
+    </section>
   )
 }

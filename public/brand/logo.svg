@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 190">
+  <rect width="640" height="190" rx="28" fill="#FBF5EF"/>
+  <g transform="translate(42 38)">
+    <path d="M24 86c15-6 32-9 50-9s35 3 50 9" fill="none" stroke="#BB6C4A" stroke-linecap="round" stroke-width="4"/>
+    <path d="M30 63C44 47 57.5 27.3 74 4c16.5 23.3 30 43 44 59" fill="none" stroke="#2E241F" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"/>
+    <circle cx="74" cy="40" r="6" fill="#D8B186"/>
+  </g>
+  <text x="200" y="86" fill="#2E241F" font-family="Georgia, serif" font-size="56" letter-spacing="1.4">Casa Bruna</text>
+  <text x="204" y="118" fill="#705F55" font-family="Arial, sans-serif" font-size="16" letter-spacing="5">ATELIER DE CHEESECAKES</text>
+  <text x="204" y="147" fill="#BB6C4A" font-family="Arial, sans-serif" font-size="15" letter-spacing="2">HORNEADO LENTO PARA SOBREMESAS MEMORABLES</text>
+</svg>

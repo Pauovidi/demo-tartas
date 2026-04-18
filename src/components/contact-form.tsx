@@ -21,7 +21,7 @@ export function ContactForm() {
         }),
       })
     } catch {
-      // mock
+      // demo endpoint
     }
     setLoading(false)
     setSubmitted(true)
@@ -30,8 +30,8 @@ export function ContactForm() {
   if (submitted) {
     return (
       <div className="flex items-center justify-center">
-        <p className="text-sm font-medium uppercase tracking-wider text-foreground">
-          Mensaje enviado correctamente. Gracias por contactarnos.
+        <p className="text-sm font-medium text-foreground">
+          Mensaje demo enviado correctamente. Gracias por probar el formulario.
         </p>
       </div>
     )
@@ -40,10 +40,7 @@ export function ContactForm() {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5">
       <div>
-        <label
-          htmlFor="name"
-          className="mb-2 block text-xs font-bold uppercase tracking-[0.15em] text-foreground"
-        >
+        <label htmlFor="name" className="mb-2 block text-xs font-semibold uppercase tracking-[0.18em] text-foreground">
           Nombre
         </label>
         <input
@@ -51,15 +48,12 @@ export function ContactForm() {
           name="name"
           type="text"
           required
-          className="w-full border border-border bg-transparent px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-foreground"
+          className="w-full rounded-[1.4rem] border border-border bg-white px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-foreground"
           placeholder="Tu nombre"
         />
       </div>
       <div>
-        <label
-          htmlFor="email"
-          className="mb-2 block text-xs font-bold uppercase tracking-[0.15em] text-foreground"
-        >
+        <label htmlFor="email" className="mb-2 block text-xs font-semibold uppercase tracking-[0.18em] text-foreground">
           Email
         </label>
         <input
@@ -67,15 +61,12 @@ export function ContactForm() {
           name="email"
           type="email"
           required
-          className="w-full border border-border bg-transparent px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-foreground"
-          placeholder="tu@email.com"
+          className="w-full rounded-[1.4rem] border border-border bg-white px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-foreground"
+          placeholder="tu@demo.example"
         />
       </div>
       <div>
-        <label
-          htmlFor="message"
-          className="mb-2 block text-xs font-bold uppercase tracking-[0.15em] text-foreground"
-        >
+        <label htmlFor="message" className="mb-2 block text-xs font-semibold uppercase tracking-[0.18em] text-foreground">
           Mensaje
         </label>
         <textarea
@@ -83,16 +74,16 @@ export function ContactForm() {
           name="message"
           required
           rows={5}
-          className="w-full resize-none border border-border bg-transparent px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-foreground"
-          placeholder="Escribe tu mensaje..."
+          className="w-full resize-none rounded-[1.4rem] border border-border bg-white px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-foreground"
+          placeholder="Cuéntanos qué quieres probar en la demo."
         />
       </div>
       <button
         type="submit"
         disabled={loading}
-        className="bg-primary px-8 py-3.5 text-xs font-bold uppercase tracking-[0.2em] text-primary-foreground transition-opacity hover:opacity-80 disabled:opacity-50"
+        className="rounded-full bg-primary px-8 py-3.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
       >
-        {loading ? "Enviando..." : "Enviar mensaje"}
+        {loading ? "Enviando..." : "Enviar mensaje demo"}
       </button>
     </form>
   )

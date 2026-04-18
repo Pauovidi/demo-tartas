@@ -24,15 +24,15 @@ import {
 import { toast } from "sonner"
 
 const flavorEmojis: Record<string, string> = {
-  "Clásica": "🍰",
-  Hippo: "🦛",
-  Pistacho: "🟢",
-  "Mango-Maracuyá": "🥭",
-  Lotus: "🧁",
-  Gofio: "🌾",
-  Nutella: "🍫",
-  Tiramisú: "☕",
-  "Polvito Uruguayo": "✨",
+  "Vainilla tostada": "🤍",
+  "Pistacho verde": "🟢",
+  "Cacao ahumado": "🍫",
+  "Limón crema": "🍋",
+  "Higo y miel": "🍯",
+  "Café avellana": "☕",
+  "Mandarina y salvia": "🍊",
+  "Frambuesa blanca": "🍓",
+  "Caramelo marino": "✨",
 }
 
 function getFlavorEmoji(flavor: string): string {

@@ -4,11 +4,14 @@ import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
 import { ShoppingBag, Menu, X } from "lucide-react"
+
 import { useCart } from "@/src/context/cart-context"
 
 const navLinks = [
-  { href: "/productos", label: "PRODUCTOS" },
+  { href: "/", label: "Inicio" },
+  { href: "/productos", label: "Colección" },
   { href: "/faqs", label: "FAQ" },
+  { href: "/prensa", label: "Notas" },
 ]
 
 export function SiteHeader() {
@@ -16,75 +19,79 @@ export function SiteHeader() {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   return (
-    <>
-      <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur-sm">
-        <div className="mx-auto flex h-16 max-w-[1600px] items-center justify-between px-6 lg:px-10">
-          {/* Logo */}
-          <Link href="/" className="flex-shrink-0">
-            <Image
-              src="/images/logo.png"
-              alt="SayCheese by N&eacute;stor P&eacute;rez"
-              width={210}
-              height={75}
-              className="h-[60px] w-auto"
-              priority
-            />
-          </Link>
+    <header className="sticky top-0 z-40 border-b border-white/60 bg-background/88 backdrop-blur-xl">
+      <div className="border-b border-foreground/8 bg-white/50 px-5 py-2 text-center text-[11px] font-medium uppercase tracking-[0.26em] text-muted-foreground md:px-8">
+        Portfolio demo · rebrand visual, chatbot y checkout preservados
+      </div>
 
-          {/* Desktop Nav */}
-          <nav className="hidden items-center gap-8 md:flex" aria-label="Navegacion principal">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-sm font-bold uppercase tracking-[0.15em] text-foreground transition-colors hover:text-primary"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
+      <div className="page-shell flex min-h-[88px] items-center justify-between gap-4">
+        <Link href="/" className="flex items-center gap-4">
+          <Image
+            src="/brand/logo.svg"
+            alt="Casa Bruna"
+            width={220}
+            height={65}
+            className="h-12 w-auto md:h-14"
+            priority
+          />
+        </Link>
 
-          {/* Actions */}
-          <div className="flex items-center gap-4">
-            <button
-              onClick={openCart}
-              className="flex items-center gap-2 text-xs font-medium uppercase tracking-[0.15em] text-primary transition-colors hover:text-primary/70"
+        <nav className="hidden items-center gap-7 lg:flex" aria-label="Navegación principal">
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="text-sm font-semibold text-foreground/80 transition-colors hover:text-foreground"
             >
-              Mi pedido ({totalItems})
-              <ShoppingBag className="h-4 w-4" />
-            </button>
-            <button
-              onClick={() => setMobileOpen(!mobileOpen)}
-              className="text-foreground md:hidden"
-              aria-label={mobileOpen ? "Cerrar men&uacute;" : "Abrir men&uacute;"}
-            >
-              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </button>
-          </div>
-        </div>
+              {link.label}
+            </Link>
+          ))}
+        </nav>
 
-        {/* Mobile Nav */}
-        {mobileOpen && (
-          <nav
-            className="border-t border-border bg-background px-4 py-6 md:hidden"
-            aria-label="Navegacion movil"
+        <div className="flex items-center gap-3">
+          <Link
+            href="/#atelier-contact"
+            className="hidden rounded-full border border-foreground/12 bg-white px-4 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-secondary md:inline-flex"
           >
-            <ul className="flex flex-col gap-4">
-              {navLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    onClick={() => setMobileOpen(false)}
-                    className="text-sm font-medium uppercase tracking-[0.15em] text-foreground"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        )}
-      </header>
-    </>
+            Reservas demo
+          </Link>
+          <button
+            onClick={openCart}
+            className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5"
+          >
+            <ShoppingBag className="h-4 w-4" />
+            Pedido ({totalItems})
+          </button>
+          <button
+            onClick={() => setMobileOpen((prev) => !prev)}
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-foreground/12 bg-white text-foreground lg:hidden"
+            aria-label={mobileOpen ? "Cerrar menú" : "Abrir menú"}
+          >
+            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
+      </div>
+
+      {mobileOpen && (
+        <nav
+          className="border-t border-foreground/8 bg-background/96 px-5 py-5 lg:hidden"
+          aria-label="Navegación móvil"
+        >
+          <ul className="space-y-3">
+            {navLinks.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  onClick={() => setMobileOpen(false)}
+                  className="block rounded-2xl border border-foreground/10 bg-white/75 px-4 py-3 text-sm font-semibold text-foreground"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
+    </header>
   )
 }

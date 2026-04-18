@@ -4,30 +4,31 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: #fffdf8;
-  --foreground: #3b2314;
-  --card: #ffffff;
-  --card-foreground: #3b2314;
-  --popover: #ffffff;
-  --popover-foreground: #3b2314;
-  --primary: #A16336;
-  --primary-foreground: #fffdf8;
-  --secondary: #FFF8EC;
-  --secondary-foreground: #3b2314;
-  --muted: #FFF3DC;
-  --muted-foreground: #8b6f5a;
-  --accent: #FFDD98;
-  --accent-foreground: #3b2314;
-  --destructive: #dc2626;
-  --destructive-foreground: #dc2626;
-  --border: #e8d9c5;
-  --input: #e8d9c5;
-  --ring: #A16336;
-  --radius: 0px;
+  --background: #fbf5ef;
+  --foreground: #2e241f;
+  --card: #fffaf6;
+  --card-foreground: #2e241f;
+  --popover: #fffaf6;
+  --popover-foreground: #2e241f;
+  --primary: #bb6c4a;
+  --primary-foreground: #fff8f1;
+  --secondary: #efe1d2;
+  --secondary-foreground: #2e241f;
+  --muted: #f5ebe1;
+  --muted-foreground: #705f55;
+  --accent: #d8b186;
+  --accent-foreground: #2e241f;
+  --destructive: #c23b32;
+  --destructive-foreground: #fff8f1;
+  --border: #dbc6b4;
+  --input: #dbc6b4;
+  --ring: #bb6c4a;
+  --radius: 1.25rem;
 }
 
 @theme inline {
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display), Georgia, serif;
   --font-mono: 'Geist Mono', 'Geist Mono Fallback';
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -48,17 +49,48 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --radius-sm: calc(var(--radius));
-  --radius-md: calc(var(--radius));
+  --radius-sm: calc(var(--radius) - 8px);
+  --radius-md: calc(var(--radius) - 4px);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius));
+  --radius-xl: calc(var(--radius) + 4px);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-background text-foreground;
+    background-image:
+      radial-gradient(circle at top left, rgba(216, 177, 134, 0.24), transparent 36%),
+      radial-gradient(circle at 82% 14%, rgba(187, 108, 74, 0.12), transparent 24%),
+      linear-gradient(180deg, rgba(255, 250, 246, 0.75), rgba(251, 245, 239, 0.96));
+  }
+
+  ::selection {
+    background: rgba(187, 108, 74, 0.2);
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display), Georgia, serif;
+  }
+
+  .page-shell {
+    @apply mx-auto w-full max-w-[1240px] px-5 md:px-8 lg:px-10;
+  }
+
+  .paper-panel {
+    @apply rounded-[2rem] border border-white/60 bg-white/70 shadow-[0_20px_70px_-38px_rgba(46,36,31,0.55)] backdrop-blur;
+  }
+
+  .soft-divider {
+    background: linear-gradient(90deg, transparent, rgba(112, 95, 85, 0.28), transparent);
   }
 }

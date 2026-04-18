@@ -31,21 +31,21 @@ test("resuelve próximo día de semana válido", () => {
   assert.deepEqual(parsed, { kind: "date", iso: "2026-03-18" })
 })
 
-test("rechaza martes por día cerrado y propone miércoles", () => {
+test("rechaza martes por día cerrado y propone jueves", () => {
   const resolution = resolveRequestedPickupDate("2026-03-17", NOW, LEAD_DAYS, SHOP_TZ)
   assert.deepEqual(resolution, {
     kind: "closed",
     requestedDate: "2026-03-17",
-    nextAvailableDate: "2026-03-18",
+    nextAvailableDate: "2026-03-19",
   })
 })
 
-test("rechaza lunes por día cerrado y salta al siguiente día abierto", () => {
+test("acepta lunes cuando el atelier abre ese día", () => {
   const resolution = resolveRequestedPickupDate("2026-03-16", NOW, LEAD_DAYS, SHOP_TZ)
   assert.deepEqual(resolution, {
-    kind: "closed",
+    kind: "valid",
     requestedDate: "2026-03-16",
-    nextAvailableDate: "2026-03-18",
+    pickupDate: "2026-03-16",
   })
 })
 
@@ -58,12 +58,12 @@ test("rechaza fechas con menos de 3 días y devuelve la primera disponible abier
   })
 })
 
-test("acepta miércoles válido cuando cumple plazo y apertura", () => {
+test("rechaza miércoles y salta al jueves disponible", () => {
   const resolution = resolveRequestedPickupDate("2026-03-18", NOW, LEAD_DAYS, SHOP_TZ)
   assert.deepEqual(resolution, {
-    kind: "valid",
+    kind: "closed",
     requestedDate: "2026-03-18",
-    pickupDate: "2026-03-18",
+    nextAvailableDate: "2026-03-19",
   })
 })
 

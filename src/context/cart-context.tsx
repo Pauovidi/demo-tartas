@@ -1,6 +1,7 @@
 "use client"
 
 import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from "react"
+
 import type { Product } from "@/src/data/products"
 
 export interface CartItem {
@@ -22,6 +23,7 @@ interface CartContextType {
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined)
+const STORAGE_KEY = "casa-bruna-demo-cart"
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([])
@@ -29,12 +31,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [hydrated, setHydrated] = useState(false)
 
   useEffect(() => {
-    const stored = localStorage.getItem("saycheese-cart")
+    const stored = localStorage.getItem(STORAGE_KEY)
     if (stored) {
       try {
         setItems(JSON.parse(stored))
       } catch {
-        // ignore
+        // ignore invalid persisted demo state
       }
     }
     setHydrated(true)
@@ -42,7 +44,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (hydrated) {
-      localStorage.setItem("saycheese-cart", JSON.stringify(items))
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
     }
   }, [items, hydrated])
 

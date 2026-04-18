@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+
 import { faqs } from "@/src/data/faqs"
 import {
   Accordion,
@@ -8,29 +9,35 @@ import {
 } from "@/components/ui/accordion"
 
 export const metadata: Metadata = {
-  title: "FAQs | SayCheese",
-  description: "Preguntas frecuentes sobre recogidas, horarios, al\u00e9rgenos y pedidos.",
+  title: "Preguntas frecuentes",
+  description: "FAQ demo sobre catálogo, reservas y chatbot de Casa Bruna.",
 }
 
-export default function FaqsPage() {
+export default function FaqPage() {
   return (
-    <section className="py-16 md:py-24">
-      <div className="mx-auto max-w-[900px] px-6 lg:px-10">
-        <h1 className="mb-14 text-center text-3xl font-bold uppercase tracking-[0.15em] text-foreground md:text-4xl">
-          Preguntas frecuentes
-        </h1>
-        <Accordion type="single" collapsible className="w-full">
-          {faqs.map((faq, i) => (
-            <AccordionItem key={i} value={`faq-${i}`}>
-              <AccordionTrigger className="text-left text-sm font-bold uppercase tracking-[0.05em] text-foreground">
-                {faq.question}
-              </AccordionTrigger>
-              <AccordionContent className="whitespace-pre-line text-sm leading-relaxed text-muted-foreground">
-                {faq.answer}
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
+    <section className="pb-20 pt-10 md:pb-24 md:pt-14">
+      <div className="page-shell">
+        <div className="paper-panel p-6 md:p-8">
+          <p className="text-xs uppercase tracking-[0.26em] text-muted-foreground">
+            Dudas frecuentes
+          </p>
+          <h1 className="mt-3 font-display text-5xl leading-none text-foreground md:text-6xl">
+            FAQ de la demo
+          </h1>
+
+          <Accordion type="single" collapsible className="mt-8 w-full">
+            {faqs.map((faq, index) => (
+              <AccordionItem key={faq.question} value={`faq-${index}`}>
+                <AccordionTrigger className="text-left text-base font-semibold text-foreground">
+                  {faq.question}
+                </AccordionTrigger>
+                <AccordionContent className="text-sm leading-7 text-muted-foreground">
+                  {faq.answer}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </div>
       </div>
     </section>
   )

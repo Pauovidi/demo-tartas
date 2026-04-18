@@ -1,42 +1,95 @@
-import Image from "next/image"
+import Link from "next/link"
+
+import {
+  BRAND_EMAIL,
+  BRAND_LOCATION,
+  DEMO_DISCLAIMER,
+  STORE_HOURS_INLINE_TEXT,
+} from "@/src/data/business"
+
+const pillars = [
+  {
+    title: "Ritmo editorial",
+    text: "La home deja la narrativa de galería y se mueve hacia una boutique cálida, con bloques tipo revista, tarjetas de detalle y más aire entre secciones.",
+  },
+  {
+    title: "Operativa visible",
+    text: "Se mantiene la base técnica de reserva, catálogo y chatbot, pero el lenguaje comercial se ha reescrito para una colección demo segura y coherente.",
+  },
+  {
+    title: "Datos neutralizados",
+    text: "Contacto, legales, FAQ, metadatos, soportes de WhatsApp y copies de atención se han sustituido por placeholders y valores demo no identificables.",
+  },
+]
 
 export function ManifestoSection() {
   return (
-    <section className="border-t border-border py-16 md:py-24">
-      <div className="mx-auto max-w-[1600px] px-6 lg:px-10">
-        <div className="grid items-center gap-10 md:grid-cols-2">
-          {/* Images */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="relative aspect-[3/4] overflow-hidden bg-secondary">
-              <Image
-                src="/images/gallery-1.jpg"
-                alt="Proceso artesanal"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="relative mt-8 aspect-[3/4] overflow-hidden bg-secondary">
-              <Image
-                src="/images/fachada.webp"
-                alt="Interior de la galería"
-                fill
-                className="object-cover"
-              />
+    <section id="atelier-contact" className="pb-14 pt-2 md:pb-20">
+      <div className="page-shell grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+        <div className="paper-panel p-6 md:p-8">
+          <p className="text-xs uppercase tracking-[0.26em] text-muted-foreground">
+            Cómo está pensada la demo
+          </p>
+          <h2 className="mt-4 max-w-xl font-display text-4xl leading-none text-foreground md:text-5xl">
+            Una misma base técnica, otra forma de presentarla.
+          </h2>
+          <p className="mt-5 max-w-xl text-sm leading-7 text-muted-foreground md:text-base">
+            Esta demo prioriza una lectura más comercial y más modular: reserva guiada, piezas
+            destacadas, narrativa breve y un pie claro para portfolio sin rastro de identidad real.
+          </p>
+
+          <div className="mt-8 space-y-3">
+            {pillars.map((pillar) => (
+              <div
+                key={pillar.title}
+                className="rounded-[1.5rem] border border-foreground/8 bg-white/80 p-5"
+              >
+                <h3 className="text-lg font-semibold text-foreground">{pillar.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">{pillar.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid gap-6">
+          <div className="paper-panel p-6 md:p-8">
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="rounded-[1.75rem] bg-[#2e241f] p-6 text-white">
+                <p className="text-xs uppercase tracking-[0.24em] text-white/70">Atención</p>
+                <p className="mt-3 font-display text-3xl">Reservas, dudas y sabores</p>
+                <p className="mt-3 text-sm leading-6 text-white/70">
+                  El launcher conversacional y el flujo de checkout siguen activos para demostrar
+                  la experiencia de pedido.
+                </p>
+              </div>
+              <div className="rounded-[1.75rem] border border-foreground/10 bg-white/85 p-6">
+                <p className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
+                  Datos demo
+                </p>
+                <p className="mt-3 text-sm leading-6 text-foreground">{BRAND_LOCATION}</p>
+                <p className="mt-1 text-sm leading-6 text-foreground">{BRAND_EMAIL}</p>
+                <p className="mt-3 text-sm leading-6 text-muted-foreground">
+                  {STORE_HOURS_INLINE_TEXT}
+                </p>
+              </div>
             </div>
           </div>
 
-          {/* Text */}
-          <div className="flex flex-col gap-6">
-            <h2 className="text-2xl font-bold uppercase leading-snug tracking-[0.05em] text-foreground md:text-3xl lg:text-4xl text-balance">
-              Donde hacemos nuestra <em className="not-italic text-primary">dulce</em> magia...
-            </h2>
-            <p className="text-sm leading-relaxed text-muted-foreground">
-              {"Un templo de aquellas peque\u00f1as cosas que, sin saber muy bien por qu\u00e9, a veces necesitamos saborear s\u00ed o s\u00ed. Un museo de los impulsos m\u00e1s dulces. Un templo del aut\u00e9ntico sabor."}
-            </p>
-            <p className="text-sm leading-relaxed text-muted-foreground">
-              {"Porque en SayCheese sabemos que, cuando algo est\u00e1 exageradamente bueno, nos olvidamos de todo y de todos, y lo \u00fanico que queremos es comernos lo que tenemos entre las manos, esperando que nadie, absolutamente nadie, nos pida un poco."}
-            </p>
-
+          <div className="paper-panel p-6 md:p-8">
+            <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+              <div>
+                <p className="text-xs uppercase tracking-[0.24em] text-primary">Portfolio-safe</p>
+                <p className="mt-3 max-w-xl text-sm leading-7 text-muted-foreground">
+                  {DEMO_DISCLAIMER}
+                </p>
+              </div>
+              <Link
+                href="/faqs"
+                className="inline-flex items-center justify-center rounded-full border border-foreground/12 bg-white px-5 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-secondary"
+              >
+                Revisar preguntas frecuentes
+              </Link>
+            </div>
           </div>
         </div>
       </div>

@@ -1,37 +1,27 @@
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Política de Cookies | SayCheese",
+  title: "Cookies demo",
 }
 
 export default function CookiesPage() {
   return (
-    <section className="py-16 md:py-24">
-      <div className="mx-auto max-w-[900px] px-6 lg:px-10">
-        <h1 className="mb-10 text-2xl font-bold uppercase tracking-[0.15em] text-foreground md:text-3xl">
-          Política de Cookies
-        </h1>
-        <div className="flex flex-col gap-6 text-sm leading-relaxed text-muted-foreground">
-          <p>
-            Este sitio web utiliza cookies propias y de terceros para mejorar la
-            experiencia de navegación, analizar el tráfico y personalizar
-            contenidos.
-          </p>
-          <p>
-            Las cookies técnicas son necesarias para el correcto funcionamiento
-            del sitio y se instalan automáticamente. Las cookies analíticas nos
-            permiten medir y analizar el comportamiento de los usuarios para
-            mejorar nuestros servicios.
-          </p>
-          <p>
-            Puede configurar o rechazar las cookies a través de la configuración
-            de su navegador. Tenga en cuenta que bloquear algunas cookies puede
-            afectar a la funcionalidad del sitio.
-          </p>
-          <p>
-            Para más información, puede consultar la guía de la AEPD sobre el
-            uso de cookies o contactarnos en hola@saycheese.es.
-          </p>
+    <section className="pb-20 pt-10 md:pb-24 md:pt-14">
+      <div className="page-shell">
+        <div className="paper-panel max-w-4xl p-6 md:p-8">
+          <h1 className="font-display text-5xl leading-none text-foreground md:text-6xl">
+            Política de cookies demo
+          </h1>
+          <div className="mt-8 flex flex-col gap-6 text-sm leading-7 text-muted-foreground">
+            <p>
+              Esta demo puede utilizar cookies técnicas o almacenamiento local para simular
+              funcionalidades de carrito y persistencia de estado.
+            </p>
+            <p>
+              No se incorporan aquí fines comerciales reales ni plataformas de seguimiento asociadas
+              a una marca cliente. El objetivo es demostrar comportamiento de interfaz y flujo.
+            </p>
+          </div>
         </div>
       </div>
     </section>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720">
+  <rect width="1200" height="720" fill="#FBF5EF"/>
+  <rect x="72" y="72" width="1056" height="576" rx="38" fill="#FFF7F0" stroke="#DBC6B4" stroke-width="4"/>
+  <path d="M204 424c94-134 208-266 332-266 88 0 145 57 210 140 52 67 116 126 248 126" fill="none" stroke="#BB6C4A" stroke-width="16" stroke-linecap="round"/>
+  <circle cx="390" cy="238" r="20" fill="#D8B186"/>
+  <circle cx="758" cy="270" r="16" fill="#2E241F"/>
+  <text x="120" y="152" fill="#705F55" font-family="Arial, sans-serif" font-size="28" letter-spacing="8">EDITORIAL NOTES</text>
+  <text x="120" y="220" fill="#2E241F" font-family="Georgia, serif" font-size="94">Casa Bruna</text>
+  <text x="120" y="286" fill="#BB6C4A" font-family="Georgia, serif" font-size="40">Atelier de cheesecakes</text>
+</svg>

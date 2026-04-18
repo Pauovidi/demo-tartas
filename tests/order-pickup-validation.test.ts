@@ -32,16 +32,16 @@ test("en día de descanso es inválido", () => {
   assert.deepEqual(validation, {
     kind: "closed",
     requestedDate: "2026-03-17",
-    nextAvailableDate: "2026-03-18",
+    nextAvailableDate: "2026-03-19",
   })
 })
 
-test("una fecha válida es aceptada", () => {
-  const validation = validateOrderPickupDate("2026-03-18", NOW, LEAD_DAYS, SHOP_TZ)
+test("el jueves siguiente se acepta como fecha válida", () => {
+  const validation = validateOrderPickupDate("2026-03-19", NOW, LEAD_DAYS, SHOP_TZ)
 
   assert.deepEqual(validation, {
     kind: "valid",
-    requestedDate: "2026-03-18",
-    pickupDate: "2026-03-18",
+    requestedDate: "2026-03-19",
+    pickupDate: "2026-03-19",
   })
 })

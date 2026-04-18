@@ -9,8 +9,8 @@ function normalize(value: string) {
 
 function detectRequestedFormat(query: string): Product["format"] | undefined {
   const normalized = normalize(query)
-  if (/\bcajita\b/.test(normalized)) return "cajita"
-  if (/\b(tarta|grande)\b/.test(normalized)) return "tarta"
+  if (/\b(cajita|petit|mini|individual)\b/.test(normalized)) return "cajita"
+  if (/\b(tarta|mesa|grande)\b/.test(normalized)) return "tarta"
   return undefined
 }
 

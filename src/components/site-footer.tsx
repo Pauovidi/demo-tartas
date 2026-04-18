@@ -2,66 +2,75 @@
 
 import Link from "next/link"
 
-const allLinks = [
+import {
+  BRAND_EMAIL,
+  BRAND_LOCATION,
+  BRAND_NAME,
+  BRAND_TAGLINE,
+  DEMO_DISCLAIMER,
+  HUMAN_SUPPORT_PHONE_DISPLAY,
+} from "@/src/data/business"
+
+const legalLinks = [
   { href: "/legal/aviso-legal", label: "Aviso legal" },
-  { href: "/legal/privacidad", label: "Pol\u00edtica de privacidad" },
-  { href: "/legal/cookies", label: "Pol\u00edtica de cookies" },
-  { href: "/legal/terminos", label: "T\u00e9rminos y condiciones" },
+  { href: "/legal/privacidad", label: "Privacidad" },
+  { href: "/legal/cookies", label: "Cookies" },
+  { href: "/legal/terminos", label: "Condiciones" },
 ]
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-border bg-background">
-      {/* Links row */}
-      <div className="mx-auto max-w-[1600px] px-6 py-10 lg:px-10">
-        <div className="flex flex-wrap items-center justify-between gap-y-4">
-          <nav
-            className="flex flex-wrap items-center gap-x-6 gap-y-3"
-            aria-label="Enlaces del pie de p\u00e1gina"
-          >
-            {allLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-xs uppercase tracking-wider text-muted-foreground transition-colors hover:text-foreground"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
-          <Link
-            href="https://www.instagram.com/saycheesebynestorperez/"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Instagram de SayCheese"
-            className="text-muted-foreground transition-colors hover:text-foreground"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
-              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-              <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
-            </svg>
-          </Link>
-        </div>
-      </div>
+    <footer className="border-t border-white/60 bg-[#f4e7da]">
+      <div className="page-shell py-12 md:py-16">
+        <div className="grid gap-10 md:grid-cols-[1.1fr_0.9fr]">
+          <div>
+            <p className="text-xs uppercase tracking-[0.26em] text-muted-foreground">
+              {BRAND_NAME}
+            </p>
+            <p className="mt-3 max-w-xl font-display text-4xl leading-none text-foreground">
+              {BRAND_TAGLINE}
+            </p>
+            <p className="mt-5 max-w-xl text-sm leading-7 text-muted-foreground">
+              {DEMO_DISCLAIMER}
+            </p>
+          </div>
 
-      {/* Bottom bar */}
-      <div className="bg-primary">
-        <div className="mx-auto max-w-[1600px] px-6 py-5 lg:px-10">
-          <p className="text-center text-xs tracking-wider text-primary-foreground">
-            &copy; {new Date().getFullYear()} SayCheese by N&eacute;stor P&eacute;rez. Todos los derechos reservados.
-          </p>
+          <div className="grid gap-8 sm:grid-cols-2">
+            <div>
+              <p className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
+                Contacto demo
+              </p>
+              <p className="mt-3 text-sm text-foreground">{BRAND_LOCATION}</p>
+              <p className="mt-2 text-sm text-foreground">{BRAND_EMAIL}</p>
+              <p className="mt-2 text-sm text-foreground">{HUMAN_SUPPORT_PHONE_DISPLAY}</p>
+            </div>
+
+            <div>
+              <p className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
+                Navegación
+              </p>
+              <nav
+                className="mt-3 flex flex-col gap-2"
+                aria-label="Enlaces del pie de página"
+              >
+                {legalLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="text-sm text-foreground transition-colors hover:text-primary"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </nav>
+            </div>
+          </div>
         </div>
+
+        <div className="soft-divider mt-10 h-px w-full" />
+        <p className="pt-5 text-xs uppercase tracking-[0.18em] text-muted-foreground">
+          © {new Date().getFullYear()} {BRAND_NAME}. Portfolio-safe demo.
+        </p>
       </div>
     </footer>
   )

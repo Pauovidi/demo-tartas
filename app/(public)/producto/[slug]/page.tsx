@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
+
 import { getCustomerFacingFormatLabel } from "@/src/data/business"
 import { products, getProductBySlug } from "@/src/data/products"
 import { ProductDetail } from "@/src/components/product/product-detail"
@@ -17,8 +18,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const product = getProductBySlug(slug)
   if (!product) return { title: "Producto no encontrado" }
+
   return {
-    title: `${product.name} (${getCustomerFacingFormatLabel(product.format)}) | SayCheese`,
+    title: `${product.name} · ${getCustomerFacingFormatLabel(product.format)}`,
     description: product.shortDescription,
   }
 }
@@ -28,7 +30,6 @@ export default async function ProductPage({ params }: Props) {
   const product = getProductBySlug(slug)
   if (!product) notFound()
 
-  // Recommend same category (different format) + same format (different category)
   const recommended = products
     .filter((p) => p.id !== product.id && (p.category === product.category || p.format === product.format))
     .slice(0, 4)
@@ -36,7 +37,7 @@ export default async function ProductPage({ params }: Props) {
   return (
     <>
       <ProductDetail product={product} />
-      {recommended.length > 0 && <RecommendedProducts products={recommended} />}
+      {recommended.length > 0 ? <RecommendedProducts products={recommended} /> : null}
     </>
   )
 }

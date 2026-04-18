@@ -1,5 +1,5 @@
 export interface OrderItem {
-  date: string // YYYY-MM-DD
+  date: string
   flavor: string
   format: "tarta" | "cajita"
   quantity: number
@@ -18,54 +18,48 @@ export interface ProductionResult {
 }
 
 const flavorEmojis: Record<string, string> = {
-  "Cl\u00e1sica": "\uD83C\uDF70",
-  "Hippo": "\uD83E\uDD9B",
-  "Pistacho": "\uD83D\uDFE2",
-  "Mango-Maracuy\u00e1": "\uD83E\uDD6D",
-  "Lotus": "\uD83E\uDDC1",
-  "Gofio": "\uD83C\uDF3E",
-  "Nutella": "\uD83C\uDF6B",
-  "Tiramis\u00fa": "\u2615",
-  "Polvito Uruguayo": "\u2728",
+  "Vainilla tostada": "🤍",
+  "Pistacho verde": "🟢",
+  "Cacao ahumado": "🍫",
+  "Limón crema": "🍋",
+  "Higo y miel": "🍯",
+  "Café avellana": "☕",
+  "Mandarina y salvia": "🍊",
+  "Frambuesa blanca": "🍓",
+  "Caramelo marino": "✨",
 }
 
 export function getFlavorEmoji(flavor: string): string {
   return flavorEmojis[flavor] ?? ""
 }
 
-// Mock orders spread across several days
 const mockOrders: OrderItem[] = [
-  // 2026-02-18
-  { date: "2026-02-18", flavor: "Cl\u00e1sica", format: "tarta", quantity: 3 },
-  { date: "2026-02-18", flavor: "Hippo", format: "tarta", quantity: 2 },
-  { date: "2026-02-18", flavor: "Pistacho", format: "cajita", quantity: 5 },
-  { date: "2026-02-18", flavor: "Mango-Maracuy\u00e1", format: "cajita", quantity: 4 },
-  { date: "2026-02-18", flavor: "Lotus", format: "tarta", quantity: 1 },
-  { date: "2026-02-18", flavor: "Cl\u00e1sica", format: "cajita", quantity: 6 },
-  // 2026-02-19
-  { date: "2026-02-19", flavor: "Cl\u00e1sica", format: "tarta", quantity: 2 },
-  { date: "2026-02-19", flavor: "Pistacho", format: "tarta", quantity: 4 },
-  { date: "2026-02-19", flavor: "Gofio", format: "cajita", quantity: 3 },
-  { date: "2026-02-19", flavor: "Hippo", format: "cajita", quantity: 7 },
-  { date: "2026-02-19", flavor: "Nutella", format: "cajita", quantity: 2 },
-  // 2026-02-20
-  { date: "2026-02-20", flavor: "Mango-Maracuy\u00e1", format: "tarta", quantity: 5 },
-  { date: "2026-02-20", flavor: "Tiramis\u00fa", format: "cajita", quantity: 3 },
-  { date: "2026-02-20", flavor: "Lotus", format: "cajita", quantity: 4 },
-  { date: "2026-02-20", flavor: "Polvito Uruguayo", format: "tarta", quantity: 1 },
-  { date: "2026-02-20", flavor: "Cl\u00e1sica", format: "cajita", quantity: 8 },
-  // 2026-02-21
-  { date: "2026-02-21", flavor: "Pistacho", format: "tarta", quantity: 3 },
-  { date: "2026-02-21", flavor: "Hippo", format: "tarta", quantity: 2 },
-  { date: "2026-02-21", flavor: "Gofio", format: "tarta", quantity: 1 },
-  { date: "2026-02-21", flavor: "Cl\u00e1sica", format: "cajita", quantity: 5 },
-  { date: "2026-02-21", flavor: "Nutella", format: "tarta", quantity: 2 },
-  // 2026-02-22
-  { date: "2026-02-22", flavor: "Cl\u00e1sica", format: "tarta", quantity: 4 },
-  { date: "2026-02-22", flavor: "Lotus", format: "tarta", quantity: 3 },
-  { date: "2026-02-22", flavor: "Pistacho", format: "cajita", quantity: 6 },
-  { date: "2026-02-22", flavor: "Mango-Maracuy\u00e1", format: "cajita", quantity: 2 },
-  { date: "2026-02-22", flavor: "Tiramis\u00fa", format: "tarta", quantity: 1 },
+  { date: "2026-02-18", flavor: "Vainilla tostada", format: "tarta", quantity: 3 },
+  { date: "2026-02-18", flavor: "Pistacho verde", format: "tarta", quantity: 2 },
+  { date: "2026-02-18", flavor: "Cacao ahumado", format: "cajita", quantity: 5 },
+  { date: "2026-02-18", flavor: "Mandarina y salvia", format: "cajita", quantity: 4 },
+  { date: "2026-02-18", flavor: "Higo y miel", format: "tarta", quantity: 1 },
+  { date: "2026-02-18", flavor: "Vainilla tostada", format: "cajita", quantity: 6 },
+  { date: "2026-02-19", flavor: "Vainilla tostada", format: "tarta", quantity: 2 },
+  { date: "2026-02-19", flavor: "Pistacho verde", format: "tarta", quantity: 4 },
+  { date: "2026-02-19", flavor: "Limón crema", format: "cajita", quantity: 3 },
+  { date: "2026-02-19", flavor: "Café avellana", format: "cajita", quantity: 7 },
+  { date: "2026-02-19", flavor: "Caramelo marino", format: "cajita", quantity: 2 },
+  { date: "2026-02-20", flavor: "Mandarina y salvia", format: "tarta", quantity: 5 },
+  { date: "2026-02-20", flavor: "Frambuesa blanca", format: "cajita", quantity: 3 },
+  { date: "2026-02-20", flavor: "Higo y miel", format: "cajita", quantity: 4 },
+  { date: "2026-02-20", flavor: "Caramelo marino", format: "tarta", quantity: 1 },
+  { date: "2026-02-20", flavor: "Vainilla tostada", format: "cajita", quantity: 8 },
+  { date: "2026-02-21", flavor: "Pistacho verde", format: "tarta", quantity: 3 },
+  { date: "2026-02-21", flavor: "Café avellana", format: "tarta", quantity: 2 },
+  { date: "2026-02-21", flavor: "Limón crema", format: "tarta", quantity: 1 },
+  { date: "2026-02-21", flavor: "Vainilla tostada", format: "cajita", quantity: 5 },
+  { date: "2026-02-21", flavor: "Caramelo marino", format: "tarta", quantity: 2 },
+  { date: "2026-02-22", flavor: "Vainilla tostada", format: "tarta", quantity: 4 },
+  { date: "2026-02-22", flavor: "Higo y miel", format: "tarta", quantity: 3 },
+  { date: "2026-02-22", flavor: "Pistacho verde", format: "cajita", quantity: 6 },
+  { date: "2026-02-22", flavor: "Mandarina y salvia", format: "cajita", quantity: 2 },
+  { date: "2026-02-22", flavor: "Frambuesa blanca", format: "tarta", quantity: 1 },
 ]
 
 function aggregate(items: OrderItem[]): ProductionLine[] {

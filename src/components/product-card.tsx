@@ -3,6 +3,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
+
 import { useCart } from "@/src/context/cart-context"
 import { getCustomerFacingFormatLabel } from "@/src/data/business"
 import type { Product } from "@/src/data/products"
@@ -17,92 +18,106 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
   const { addItem } = useCart()
   const sibling = getSibling(product)
   const hasBothFormats = !!sibling
-
-  // The card starts showing whichever format was passed in
   const [selectedFormat, setSelectedFormat] = useState<"tarta" | "cajita">(
-    hasBothFormats ? "tarta" : product.format,
+    hasBothFormats ? "tarta" : product.format
   )
 
-  // The actual product to display depends on the selected format
-  const displayProduct =
-    selectedFormat === product.format ? product : sibling ?? product
+  const displayProduct = selectedFormat === product.format ? product : sibling ?? product
 
   return (
-    <article className="group flex flex-col">
-      <Link
-        href={`/producto/${displayProduct.slug}`}
-        className="relative aspect-square overflow-hidden bg-secondary"
-      >
-        {displayProduct.images.length > 0 ? (
-          <Image
-            src={displayProduct.images[0]}
-            alt={displayProduct.name}
-            fill
-            sizes="(max-width: 768px) 50vw, (max-width: 1024px) 50vw, 33vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-            priority={priority}
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center bg-secondary p-4">
-            <p className="text-center text-xs font-medium uppercase tracking-wider text-muted-foreground">
-              En breve subiremos la imagen
-            </p>
-          </div>
-        )}
-        {/* Format badge */}
-        <span className="absolute left-2 top-2 bg-accent px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-accent-foreground">
-          {getCustomerFacingFormatLabel(displayProduct.format)}
-        </span>
-      </Link>
-      <div className="flex flex-1 flex-col pt-4">
-        <Link href={`/producto/${displayProduct.slug}`}>
-          <h3 className="text-xs font-bold uppercase tracking-[0.1em] text-foreground sm:text-sm sm:tracking-[0.15em]">
-            {displayProduct.name}
-          </h3>
+    <article className="paper-panel h-full overflow-hidden">
+      <div className="grid h-full gap-0 md:grid-cols-[0.92fr_1.08fr]">
+        <Link
+          href={`/producto/${displayProduct.slug}`}
+          className="relative min-h-[280px] overflow-hidden bg-secondary"
+        >
+          {displayProduct.images.length > 0 ? (
+            <Image
+              src={displayProduct.images[0]}
+              alt={displayProduct.name}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover transition-transform duration-500 hover:scale-[1.03]"
+              priority={priority}
+            />
+          ) : (
+            <div className="flex h-full items-center justify-center p-8 text-center text-sm text-muted-foreground">
+              Imagen editorial en preparación
+            </div>
+          )}
+          <span className="absolute left-4 top-4 rounded-full bg-white/85 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-foreground">
+            {getCustomerFacingFormatLabel(displayProduct.format)}
+          </span>
         </Link>
 
-        {/* Format toggle */}
-        {hasBothFormats && (
-          <div className="mt-2 flex gap-0 self-start border border-border">
-            <button
-              onClick={() => setSelectedFormat("tarta")}
-              className={`px-3 py-1.5 text-[10px] font-medium uppercase tracking-wider transition-colors sm:text-xs ${
-                selectedFormat === "tarta"
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-transparent text-muted-foreground hover:text-foreground"
-              }`}
+        <div className="flex flex-col p-5 md:p-6">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
+                Colección semanal
+              </p>
+              <Link href={`/producto/${displayProduct.slug}`}>
+                <h3 className="mt-2 font-display text-3xl leading-none text-foreground">
+                  {displayProduct.name}
+                </h3>
+              </Link>
+            </div>
+            <p className="text-sm font-semibold text-primary">{displayProduct.priceText}</p>
+          </div>
+
+          <p className="mt-4 text-sm leading-7 text-muted-foreground">
+            {displayProduct.description ?? displayProduct.shortDescription}
+          </p>
+
+          <div className="mt-5 flex flex-wrap gap-2 text-xs text-muted-foreground">
+            {displayProduct.weightInfo ? (
+              <span className="rounded-full bg-secondary px-3 py-1.5">{displayProduct.weightInfo}</span>
+            ) : null}
+            {displayProduct.portionInfo ? (
+              <span className="rounded-full bg-secondary px-3 py-1.5">{displayProduct.portionInfo}</span>
+            ) : null}
+          </div>
+
+          {hasBothFormats && (
+            <div className="mt-5 inline-flex w-fit rounded-full border border-foreground/10 bg-white p-1">
+              <button
+                onClick={() => setSelectedFormat("tarta")}
+                className={`rounded-full px-4 py-2 text-xs font-semibold transition-colors ${
+                  selectedFormat === "tarta"
+                    ? "bg-foreground text-background"
+                    : "text-muted-foreground"
+                }`}
+              >
+                Mesa
+              </button>
+              <button
+                onClick={() => setSelectedFormat("cajita")}
+                className={`rounded-full px-4 py-2 text-xs font-semibold transition-colors ${
+                  selectedFormat === "cajita"
+                    ? "bg-foreground text-background"
+                    : "text-muted-foreground"
+                }`}
+              >
+                Petit
+              </button>
+            </div>
+          )}
+
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+            <Link
+              href={`/producto/${displayProduct.slug}`}
+              className="inline-flex items-center justify-center rounded-full border border-foreground/12 bg-white px-5 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-secondary"
             >
-              Grande
-            </button>
+              Ver ficha
+            </Link>
             <button
-              onClick={() => setSelectedFormat("cajita")}
-              className={`border-l border-border px-3 py-1.5 text-[10px] font-medium uppercase tracking-wider transition-colors sm:text-xs ${
-                selectedFormat === "cajita"
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-transparent text-muted-foreground hover:text-foreground"
-              }`}
+              onClick={() => addItem(displayProduct, 1)}
+              className="inline-flex items-center justify-center rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5"
             >
-              Cajita
+              Añadir al pedido
             </button>
           </div>
-        )}
-
-        <p className="mt-2 text-xs font-semibold text-primary sm:text-sm">
-          {displayProduct.priceText}
-        </p>
-        <p className="mt-1 text-[10px] text-muted-foreground sm:text-xs">
-          {displayProduct.weightInfo}
-          {displayProduct.portionInfo ? ` \u00b7 ${displayProduct.portionInfo}` : ""}
-        </p>
-        <p className="mt-2 flex-1 text-[11px] leading-relaxed text-muted-foreground line-clamp-2 sm:text-xs sm:line-clamp-3">
-          {displayProduct.shortDescription}
-        </p>
-        <button
-          onClick={() => addItem(displayProduct, 1)}
-          className="mt-4 w-full bg-primary px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.15em] text-primary-foreground transition-opacity hover:opacity-80 sm:py-3 sm:text-xs sm:tracking-[0.2em]"
-        >
-          Hacer pedido
-        </button>
+        </div>
       </div>
     </article>
   )

@@ -63,7 +63,7 @@ const SHOP_TZ = process.env.SHOP_TZ ?? "Europe/Madrid"
 const SUMMARY_THRESHOLD = 30
 const ORDER_STATE_PREFIX = "__ORDER_STATE__:"
 
-const SYSTEM_PROMPT = `Eres el asistente de SayCheese.
+const SYSTEM_PROMPT = `Eres el asistente de Casa Bruna.
 Responde en español, claro y breve.
 No inventes datos de producto. Si faltan ingredientes o alérgenos confirmados, ofrece atención humana.
 Política obligatoria: ${PICKUP_ONLY_COPY}
@@ -74,7 +74,7 @@ Si puedes responder sin tools, responde directo y no llames tools.
 Si el usuario pide humano o hay incertidumbre crítica, usa tool handoff_to_human.`
 
 const HANDOFF_KEYWORDS = ["humano", "persona", "agente", "asesor", "operador"]
-const WHATSAPP_RESET_REPLY = "He reiniciado la conversación. Te ayudo con un nuevo pedido."
+const WHATSAPP_RESET_REPLY = "He reiniciado la conversación. Te ayudo con una nueva reserva."
 
 function getOpenAIClient() {
   const apiKey = process.env.OPENAI_API_KEY
@@ -97,7 +97,7 @@ function shouldRequestHandoff(message: string) {
 }
 
 function getHandoffText(channel: "web" | "whatsapp") {
-  return buildHumanSupportMessage("Te atiende una persona del equipo aquí:", channel)
+  return buildHumanSupportMessage("Te atiende una persona del atelier aquí:", channel)
 }
 
 function sanitizeAssistantText(text: string) {
@@ -133,8 +133,8 @@ function extractPhoneFromText(text: string) {
 
 function parseFormat(text: string): "tarta" | "cajita" | undefined {
   const normalized = normalize(text)
-  if (/\b(cajita|caja|pequena|pequeña|pequeno|pequeño|mini|individual)\b/.test(normalized)) return "cajita"
-  if (/\b(tarta|grande|mediana|mediano)\b/.test(normalized)) return "tarta"
+  if (/\b(cajita|caja|pequena|pequeña|pequeno|pequeño|mini|individual|petit)\b/.test(normalized)) return "cajita"
+  if (/\b(tarta|grande|mediana|mediano|mesa)\b/.test(normalized)) return "tarta"
   return undefined
 }
 
@@ -360,7 +360,7 @@ function hasScheduleIntent(text: string) {
 }
 
 function hasFlavorsIntent(text: string) {
-  return /sabor|tamano|tamaño|formato|tarta|grande|cajita|precio/i.test(normalize(text))
+  return /sabor|tamano|tamaño|formato|tarta|grande|mesa|cajita|petit|precio/i.test(normalize(text))
 }
 
 function hasAllergensIntent(text: string) {
@@ -368,7 +368,7 @@ function hasAllergensIntent(text: string) {
 }
 
 function hasOrderIntent(text: string) {
-  return /quiero|pedido|encargar|tarta|grande|cajita|para\s/i.test(normalize(text))
+  return /quiero|pedido|encargar|tarta|grande|mesa|cajita|petit|para\s/i.test(normalize(text))
 }
 
 function hasExistingOrderQueryIntent(text: string) {
@@ -449,15 +449,15 @@ function buildProductFactsReply(message: string, channel: "web" | "whatsapp") {
     return `Para ${facts.label}: ${sections.join(" ")}`
   }
 
-  return `Para ${facts.label}: ${sections.join(" ")} No tengo confirmado ${missingSections.join(" ni ")} ahora mismo. ${buildHumanSupportMessage("Te atiende un humano aquí:", channel)}`
+  return `Para ${facts.label}: ${sections.join(" ")} No tengo confirmado ${missingSections.join(" ni ")} ahora mismo. ${buildHumanSupportMessage("Te atiende una persona del atelier aquí:", channel)}`
 }
 
 function buildOrderItemLabel(state: OrderState) {
-  if (!state.flavor) return state.format === "cajita" ? "una pequeña" : state.format === "tarta" ? "una grande" : "el pedido"
+  if (!state.flavor) return state.format === "cajita" ? "un petit" : state.format === "tarta" ? "una mesa" : "el pedido"
 
   const flavorLabel = findFlavorFactsByQuery(state.flavor)?.label ?? findProductBySlugOrFlavor(state.flavor)?.name ?? state.flavor.replace(/-/g, " ")
-  if (state.format === "cajita") return `una ${flavorLabel} pequeña`
-  if (state.format === "tarta") return `una ${flavorLabel} grande`
+  if (state.format === "cajita") return `un petit de ${flavorLabel}`
+  if (state.format === "tarta") return `una mesa de ${flavorLabel}`
   return `el pedido de ${flavorLabel}`
 }
 
@@ -493,7 +493,7 @@ function buildPendingOrderReply(state: OrderState, channel: "web" | "whatsapp", 
     return buildContextualOrderReply(state, channel, tz)
   }
 
-  return 'Cuando quieras, dime sabor y fecha y seguimos con el pedido. Si prefieres empezar de nuevo, escribe "reiniciar".'
+  return 'Cuando quieras, dime sabor y fecha y seguimos con la reserva. Si prefieres empezar de nuevo, escribe "reiniciar".'
 }
 
 async function activateHandoff(userId: string, channel: "web" | "whatsapp", reason?: string) {
@@ -596,7 +596,7 @@ export async function handleMessage({ sessionId, message, phone, channel }: Hand
   if (hasResetOrderIntent(message)) {
     return saveAndReply(
       userId,
-      "He reiniciado el pedido actual. Cuando quieras, dime sabor y fecha y empezamos de nuevo.",
+      "He reiniciado la reserva actual. Cuando quieras, dime sabor y fecha y empezamos de nuevo.",
       resetOrderState(state, channel)
     )
   }
@@ -605,7 +605,7 @@ export async function handleMessage({ sessionId, message, phone, channel }: Hand
     await activateHandoff(userId, channel, "Consulta de pedido existente")
     return saveAndReply(
       userId,
-      "Para revisar tu pedido con seguridad, te atiende una persona del equipo. Si quieres, indícame tu nombre y el día de recogida.",
+      "Para revisar tu reserva con seguridad, te atiende una persona del atelier. Si quieres, indícame tu nombre y el día de recogida.",
       resetOrderState(state, channel)
     )
   }
@@ -751,7 +751,7 @@ export async function handleMessage({ sessionId, message, phone, channel }: Hand
     const nextState = resetOrderState(state, channel)
     return saveAndReply(
       userId,
-      `Pedido creado. Recogida el ${formatDateEs(created.deliveryDate, SHOP_TZ)}. ${PICKUP_ONLY_COPY}`,
+      `Reserva creada. Recogida el ${formatDateEs(created.deliveryDate, SHOP_TZ)}. ${PICKUP_ONLY_COPY}`,
       nextState
     )
   }
@@ -940,4 +940,3 @@ export async function handleMessage({ sessionId, message, phone, channel }: Hand
 
   return { text }
 }
-

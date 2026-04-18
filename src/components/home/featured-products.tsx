@@ -1,31 +1,57 @@
 "use client"
 
 import Link from "next/link"
+
 import { getFlavors } from "@/src/data/products"
 import { ProductCard } from "@/src/components/product-card"
 
 export function FeaturedProducts() {
-  const flavors = getFlavors().slice(0, 6)
+  const flavors = getFlavors().slice(0, 4)
 
   return (
-    <section id="nuestros-sabores" className="scroll-mt-20 py-16 md:py-24">
-      <div className="mx-auto max-w-[1600px] px-6 lg:px-10">
-        <h2 className="text-center text-2xl font-bold uppercase tracking-[0.15em] text-foreground md:text-3xl lg:text-4xl text-balance">
-          Nuestros sabores
-        </h2>
-        <div className="mt-12 grid grid-cols-2 gap-4 sm:gap-10 lg:grid-cols-3">
-          {flavors.map((flavor, i) => {
+    <section id="coleccion" className="pb-20 pt-2 md:pb-28">
+      <div className="page-shell">
+        <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">
+              Colección destacada
+            </p>
+            <h2 className="mt-3 font-display text-4xl leading-none text-foreground md:text-5xl">
+              Cuatro piezas para mostrar catálogo, ficha y compra.
+            </h2>
+          </div>
+          <p className="max-w-xl text-sm leading-7 text-muted-foreground md:text-right">
+            El catálogo mantiene la lógica original de sabores y formatos, pero la tarjeta, la
+            jerarquía y las microcopias cambian para que la experiencia se lea como otra marca.
+          </p>
+        </div>
+
+        <div className="grid gap-5 md:grid-cols-2">
+          {flavors.map((flavor, index) => {
             const product = flavor.cajita ?? flavor.tarta
             if (!product) return null
-            return <ProductCard key={flavor.category} product={product} priority={i < 3} />
+
+            return (
+              <div
+                key={flavor.category}
+                className={index === 0 ? "md:col-span-2" : undefined}
+              >
+                <ProductCard product={product} priority={index < 2} />
+              </div>
+            )
           })}
         </div>
-        <div className="mt-14 flex justify-center">
+
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-sm leading-6 text-muted-foreground">
+            El resto de la colección conserva rutas y utilidades, pero con producto demo y assets
+            vectoriales propios.
+          </p>
           <Link
             href="/productos"
-            className="border border-primary px-8 py-3.5 text-xs font-bold uppercase tracking-[0.2em] text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
+            className="inline-flex items-center justify-center rounded-full bg-foreground px-6 py-3 text-sm font-semibold text-background transition-transform hover:-translate-y-0.5"
           >
-            Ver todos los productos
+            Ver catálogo completo
           </Link>
         </div>
       </div>

@@ -3,14 +3,14 @@ import assert from "node:assert/strict"
 
 import { hasGreetingIntent, WELCOME_MESSAGE } from "../lib/chatbot/welcome"
 
-test("mantiene exactamente el saludo histórico del chatbot", () => {
+test("expone el nuevo saludo del chatbot demo", () => {
   assert.equal(
     WELCOME_MESSAGE,
-    "¡Hola! Puedes reservar tu tarta para una fecha concreta y, además, normalmente también hay tartas en tienda para compra directa hasta agotar existencias. Si quieres, te ayudo con sabores, tamaños, precios o con una reserva."
+    "¡Hola! Soy el asistente de Casa Bruna. Puedo ayudarte con sabores, formatos, horarios y con una reserva demo de recogida."
   )
 })
 
-test("reconoce el saludo simple para devolver el mensaje histórico", () => {
+test("reconoce el saludo simple para devolver el mensaje de bienvenida", () => {
   assert.equal(hasGreetingIntent("hola"), true)
   assert.equal(hasGreetingIntent("buenas"), true)
   assert.equal(hasGreetingIntent("quiero una tarta"), false)

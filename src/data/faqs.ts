@@ -12,57 +12,46 @@ export interface FAQ {
 
 export const faqs: FAQ[] = [
   {
-    question: "\u00bfC\u00f3mo puedo hacer un pedido?",
-    answer:
-      `Puedes hacer tu pedido desde la web o escribirnos directamente. ${buildHumanSupportMessage("Te atendemos también aquí:")}`,
+    question: "¿Cómo puedo hacer una reserva?",
+    answer: `Puedes preparar tu selección desde la web demo o escribirnos directamente. ${buildHumanSupportMessage(
+      "También te atendemos aquí:"
+    )}`,
   },
   {
-    question: "\u00bfCu\u00e1les son los tama\u00f1os disponibles?",
-    answer:
-      `${FORMAT_SIZE_COPY} Cajita: 400 g, ideal para 1-2 personas, 12 €. Grande: 1,7 kg, 10-12 raciones, 35 €.`,
+    question: "¿Qué formatos hay disponibles?",
+    answer: `${FORMAT_SIZE_COPY} Petit: 450 g y 2-3 raciones. Mesa: 1,8 kg y 10-12 raciones.`,
   },
   {
-    question: "\u00bfHac\u00e9is env\u00edos?",
-    answer:
-      PICKUP_ONLY_COPY,
+    question: "¿Se envía a domicilio?",
+    answer: PICKUP_ONLY_COPY,
   },
   {
-    question: "\u00bfCu\u00e1l es el horario?",
+    question: "¿Cuál es el horario?",
     answer: STORE_HOURS_TEXT,
   },
   {
-    question: "\u00bfC\u00f3mo debo conservar el pedido al recogerlo?",
+    question: "¿Cómo debo conservar la pieza?",
     answer:
-      "Guarda tu pedido en nevera (2-4 °C) y consúmelo en un máximo de 5 días. Sácalo 15-20 minutos antes para disfrutar mejor la textura. No congelar.",
+      "Mantén la pieza refrigerada entre 2 y 4 °C. Sáquela 15 minutos antes de servir para recuperar textura y aroma.",
   },
   {
-    question: "\u00bfContienen al\u00e9rgenos?",
+    question: "¿Dónde veo los alérgenos?",
     answer:
-      "Cada sabor muestra sus alérgenos confirmados en la ficha de producto. Si necesitas revisar un caso concreto antes de pedir, escríbenos y te confirmamos el dato.",
+      "Cada ficha muestra alérgenos confirmados. Si necesitas validar un caso concreto, el asistente o el contacto humano demo te remiten a la información disponible.",
   },
   {
-    question: "\u00bfLos productos son aptos para cel\u00edacos o veganos?",
+    question: "¿Puedo encargar una selección para evento?",
     answer:
-      "Actualmente nuestros productos no son aptos para celíacos ni veganos, ya que contienen gluten, lácteos y huevo. Estamos trabajando en nuevas opciones.",
+      "Sí. En esta demo el texto se ha neutralizado, pero la base técnica sigue preparada para gestionar reservas, atención y seguimiento de pedidos.",
   },
   {
-    question: "\u00bfPuedo hacer un pedido personalizado?",
+    question: "¿Hay pago real en esta demo?",
     answer:
-      "S\u00ed, aceptamos pedidos personalizados para eventos, celebraciones y regalos corporativos. Cont\u00e1ctanos con los detalles de tu petici\u00f3n y te informaremos sobre disponibilidad y plazos.",
+      "No. El checkout demuestra el flujo funcional, pero esta versión portfolio-safe no procesa pagos reales ni envíos.",
   },
   {
-    question: "\u00bfQu\u00e9 m\u00e9todos de pago acept\u00e1is?",
+    question: "¿Qué hace el chatbot?",
     answer:
-      "Aceptamos Bizum y transferencia bancaria. Te confirmaremos los datos de pago una vez recibamos tu pedido.",
-  },
-  {
-    question: "\u00bfPuedo devolver un pedido?",
-    answer:
-      "Al tratarse de productos alimentarios perecederos, no aceptamos devoluciones una vez entregado el pedido. Si al recogerlo ves cualquier incidencia, dínoslo cuanto antes y lo revisamos contigo.",
-  },
-  {
-    question: "\u00bfTen\u00e9is tienda f\u00edsica?",
-    answer:
-      "Actualmente somos un obrador artesanal y trabajamos bajo pedido. Puedes realizar tu pedido a trav\u00e9s de la web o contact\u00e1ndonos directamente. S\u00edguenos en redes sociales para estar al tanto de posibles eventos y puntos de venta temporales.",
+      "Te ayuda a revisar sabores, formatos, horarios y reservas. Si falta un dato confirmado, te deriva a atención humana demo sin inventar respuestas.",
   },
 ]

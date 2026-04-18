@@ -1,5 +1,5 @@
 export const WELCOME_MESSAGE =
-  "¡Hola! Puedes reservar tu tarta para una fecha concreta y, además, normalmente también hay tartas en tienda para compra directa hasta agotar existencias. Si quieres, te ayudo con sabores, tamaños, precios o con una reserva."
+  "¡Hola! Soy el asistente de Casa Bruna. Puedo ayudarte con sabores, formatos, horarios y con una reserva demo de recogida."
 
 export function hasGreetingIntent(text: string) {
   return /^(hola|hola!|holaa|buenas|buenos dias|buenas tardes|buenas noches|hey|hello)\b/i.test(

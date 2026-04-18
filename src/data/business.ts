@@ -1,20 +1,31 @@
-export const HUMAN_SUPPORT_PHONE_RAW = "681147149"
-export const HUMAN_SUPPORT_PHONE_E164 = "+34681147149"
-export const HUMAN_SUPPORT_PHONE_DISPLAY = "+34 681 14 71 49"
-export const HUMAN_SUPPORT_WHATSAPP_LINK = "https://wa.me/34681147149"
-export const MOBILE_LAUNCHER_WHATSAPP_PHONE_E164 = "+16414294476"
-export const MOBILE_LAUNCHER_WHATSAPP_LINK = "https://wa.me/16414294476"
+export const BRAND_NAME = "Casa Bruna"
+export const BRAND_TAGLINE = "Horneado lento para sobremesas memorables."
+export const BRAND_TONE = "Mediterráneo elegante, cálido y sereno."
+export const BRAND_URL = "https://casabruna.example"
+export const BRAND_EMAIL = "atelier@casabruna.example"
+export const BRAND_LOCATION = "Atelier demo en Madrid"
+export const BRAND_SUPPORT_LABEL = "Equipo Casa Bruna"
+export const DEMO_DISCLAIMER =
+  "Demo portfolio: los datos de contacto, disponibilidad y pedidos son ficticios."
 
-export const PICKUP_ONLY_COPY = "Solo recogida en tienda. No hacemos envíos."
-export const FORMAT_SIZE_COPY = "Siempre trabajamos con 2 tamaños: grande y cajita."
-export const CLOSED_PICKUP_DAYS_COPY = "lunes y martes estamos cerrados"
+export const HUMAN_SUPPORT_PHONE_RAW = "600000000"
+export const HUMAN_SUPPORT_PHONE_E164 = "+34600000000"
+export const HUMAN_SUPPORT_PHONE_DISPLAY = "+34 600 000 000"
+export const HUMAN_SUPPORT_WHATSAPP_LINK = "https://wa.me/34600000000"
+export const MOBILE_LAUNCHER_WHATSAPP_PHONE_E164 = "+34600000000"
+export const MOBILE_LAUNCHER_WHATSAPP_LINK = "https://wa.me/34600000000"
+
+export const PICKUP_ONLY_COPY =
+  "Recogida concertada en atelier. Esta demo no ofrece envíos ni pagos online reales."
+export const FORMAT_SIZE_COPY = "Trabajamos con dos formatos: Mesa y Petit."
+export const CLOSED_PICKUP_DAYS_COPY = "martes y miércoles permanecemos cerrados"
 
 export type ProductFormat = "tarta" | "cajita"
 export type OrderItemType = "cake" | "box"
 
 const CUSTOMER_FACING_FORMAT_LABELS: Record<ProductFormat, string> = {
-  tarta: "grande",
-  cajita: "cajita",
+  tarta: "Mesa",
+  cajita: "Petit",
 }
 
 const ORDER_ITEM_TYPE_LABELS: Record<OrderItemType, string> = {
@@ -23,19 +34,19 @@ const ORDER_ITEM_TYPE_LABELS: Record<OrderItemType, string> = {
 }
 
 export const STORE_HOURS_LINES = [
-  "Horario:",
-  "Miércoles: 16:30–20:30",
-  "Jueves: 16:30–20:30",
-  "Viernes: 16:30–20:30",
-  "Sábado: 10:00–14:00 y 16:30–20:30",
-  "Domingo: 10:00–14:00",
-  "Lunes y martes: cerrado.",
+  "Horario del atelier:",
+  "Jueves: 16:00–20:00",
+  "Viernes: 16:00–20:00",
+  "Sábado: 11:00–14:30 y 17:00–20:30",
+  "Domingo: 11:00–14:30",
+  "Lunes: 16:00–19:30",
+  "Martes y miércoles: cerrado.",
   PICKUP_ONLY_COPY,
 ] as const
 
 export const STORE_HOURS_TEXT = STORE_HOURS_LINES.join("\n")
 export const STORE_HOURS_INLINE_TEXT = STORE_HOURS_LINES.join(" ")
-export const OPEN_PICKUP_WEEKDAY_INDEXES = [0, 3, 4, 5, 6] as const
+export const OPEN_PICKUP_WEEKDAY_INDEXES = [0, 1, 4, 5, 6] as const
 
 export function getCustomerFacingFormatLabel(format: ProductFormat) {
   return CUSTOMER_FACING_FORMAT_LABELS[format]
@@ -46,20 +57,25 @@ export function getOrderItemTypeLabel(type: OrderItemType) {
 }
 
 export function isPickupWeekdayOpen(weekday: number) {
-  return OPEN_PICKUP_WEEKDAY_INDEXES.includes(weekday as typeof OPEN_PICKUP_WEEKDAY_INDEXES[number])
+  return OPEN_PICKUP_WEEKDAY_INDEXES.includes(
+    weekday as (typeof OPEN_PICKUP_WEEKDAY_INDEXES)[number]
+  )
 }
 
 export function buildHumanSupportMessage(
-  prefix = "Te atiende una persona del equipo aquí:",
+  prefix = "Te atiende una persona del atelier aquí:",
   channel: "web" | "whatsapp" = "web"
 ) {
   if (channel === "whatsapp") {
     return `${prefix} ${HUMAN_SUPPORT_PHONE_DISPLAY}`
   }
 
-  return `${prefix} ${HUMAN_SUPPORT_WHATSAPP_LINK} o llama al ${HUMAN_SUPPORT_PHONE_E164}`
+  return `${prefix} ${HUMAN_SUPPORT_WHATSAPP_LINK} o escribe al ${HUMAN_SUPPORT_PHONE_E164}`
 }
 
 export function buildUnconfirmedProductInfoMessage(channel: "web" | "whatsapp" = "web") {
-  return `No tengo ese dato confirmado ahora mismo. ${buildHumanSupportMessage("Te atiende un humano aquí:", channel)}`
+  return `No tengo ese dato confirmado en esta demo ahora mismo. ${buildHumanSupportMessage(
+    "Si quieres, te lo revisa una persona del atelier aquí:",
+    channel
+  )}`
 }

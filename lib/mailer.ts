@@ -42,33 +42,33 @@ export async function sendOrderConfirmation(input: SendOrderConfirmationInput) {
   const { transporter, from } = createTransporter()
 
   const itemsText = input.items
-    .map((item) => `- ${item.type === "cake" ? "Tarta" : "Cajita"} · ${item.flavor} · x${item.qty}`)
+    .map((item) => `- ${item.type === "cake" ? "Mesa" : "Petit"} · ${item.flavor} · x${item.qty}`)
     .join("\n")
 
   const text = [
-    "¡Gracias por tu pedido en SayCheese!",
+    "Gracias por tu reserva demo en Casa Bruna.",
     "",
     `Pedido: ${input.orderId}`,
     `Fecha programada: ${input.deliveryDate}`,
     `Nombre: ${input.name || "No indicado"}`,
     `Teléfono: ${input.phone || "No indicado"}`,
     "",
-    "Productos:",
+    "Piezas:",
     itemsText,
   ].join("\n")
 
   const html = `
-    <h2>Confirmación de pedido – SayCheese</h2>
+    <h2>Confirmación de pedido demo – Casa Bruna</h2>
     <p><strong>Pedido:</strong> ${input.orderId}</p>
     <p><strong>Fecha programada:</strong> ${input.deliveryDate}</p>
     <p><strong>Nombre:</strong> ${input.name || "No indicado"}</p>
     <p><strong>Teléfono:</strong> ${input.phone || "No indicado"}</p>
-    <p><strong>Productos:</strong></p>
+    <p><strong>Piezas:</strong></p>
     <ul>
       ${input.items
         .map(
           (item) =>
-            `<li>${item.type === "cake" ? "Tarta" : "Cajita"} · ${item.flavor} · x${item.qty}</li>`
+            `<li>${item.type === "cake" ? "Mesa" : "Petit"} · ${item.flavor} · x${item.qty}</li>`
         )
         .join("")}
     </ul>
@@ -77,7 +77,7 @@ export async function sendOrderConfirmation(input: SendOrderConfirmationInput) {
   await transporter.sendMail({
     from,
     to: input.to,
-    subject: "Confirmación de pedido – SayCheese",
+    subject: "Confirmación de pedido demo – Casa Bruna",
     text,
     html,
   })

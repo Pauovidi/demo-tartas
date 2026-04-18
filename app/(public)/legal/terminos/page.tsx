@@ -1,46 +1,30 @@
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Términos y Condiciones | SayCheese",
+  title: "Condiciones demo",
 }
 
 export default function TerminosPage() {
   return (
-    <section className="py-16 md:py-24">
-      <div className="mx-auto max-w-[900px] px-6 lg:px-10">
-        <h1 className="mb-10 text-2xl font-bold uppercase tracking-[0.15em] text-foreground md:text-3xl">
-          Términos y Condiciones
-        </h1>
-        <div className="flex flex-col gap-6 text-sm leading-relaxed text-muted-foreground">
-          <p>
-            Las presentes condiciones regulan la compra de productos a través de
-            la tienda online de SayCheese S.L. Al realizar un pedido, usted
-            acepta estas condiciones de forma íntegra.
-          </p>
-          <p>
-            Los precios indicados en la tienda incluyen el IVA aplicable.
-            SayCheese se reserva el derecho de modificar los precios en cualquier
-            momento, aunque los pedidos ya confirmados mantendrán el precio
-            vigente en el momento de la compra.
-          </p>
-          <p>
-            Los envíos se realizan a través de transporte refrigerado en un
-            plazo de 24-48 horas laborables desde la confirmación del pedido.
-            SayCheese no se responsabiliza de retrasos causados por el
-            transportista o por causas de fuerza mayor.
-          </p>
-          <p>
-            Al tratarse de productos alimentarios perecederos, no se aceptan
-            devoluciones una vez entregado el pedido, salvo que el producto
-            presente defectos evidentes o no corresponda con lo solicitado. En
-            estos casos, contacte con nosotros en las 24 horas siguientes a la
-            entrega.
-          </p>
-          <p>
-            Cualquier controversia derivada del uso de este sitio o de la
-            compra de productos se someterá a los juzgados y tribunales de
-            Madrid, con renuncia expresa a cualquier otro fuero.
-          </p>
+    <section className="pb-20 pt-10 md:pb-24 md:pt-14">
+      <div className="page-shell">
+        <div className="paper-panel max-w-4xl p-6 md:p-8">
+          <h1 className="font-display text-5xl leading-none text-foreground md:text-6xl">
+            Términos y condiciones demo
+          </h1>
+          <div className="mt-8 flex flex-col gap-6 text-sm leading-7 text-muted-foreground">
+            <p>
+              Esta experiencia muestra un flujo de compra y reserva con fines de demostración. Los
+              pedidos creados en esta versión no implican venta real, cobro real ni entrega física.
+            </p>
+            <p>
+              Los textos, precios, sabores y datos de contacto han sido neutralizados para crear una
+              marca ficticia apta para portfolio y libre de referencias identificables del proyecto original.
+            </p>
+            <p>
+              Cualquier uso de esta demo debe entenderse como demostración técnica y visual.
+            </p>
+          </div>
         </div>
       </div>
     </section>

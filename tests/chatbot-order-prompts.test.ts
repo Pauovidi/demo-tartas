@@ -8,23 +8,24 @@ test("pide solo el teléfono una vez cuando es el único dato faltante", () => {
     buildMissingFieldsPrompt({
       flavor: "pistacho",
       format: "tarta",
-    }),
-    "Necesito tu teléfono para confirmar el pedido."
+      customerName: "Lucía",
+    }, "web"),
+    "Solo me falta tu teléfono para confirmarlo."
   )
 })
 
-test("compone un único mensaje coherente cuando faltan varios campos", () => {
+test("incluye nombre y teléfono cuando faltan varios campos en web", () => {
   assert.equal(
-    buildMissingFieldsPrompt({}),
-    "Me falta sabor, formato (grande o cajita) y teléfono para confirmar el pedido."
+    buildMissingFieldsPrompt({}, "web"),
+    "Para dejarlo confirmado necesito el sabor, el formato, tu nombre y tu teléfono."
   )
 })
 
 test("no duplica campos aunque el helper se evalúe varias veces sobre el mismo estado", () => {
   assert.equal(
     buildMissingFieldsPrompt({
-      flavor: "lotus",
-    }),
-    "Me falta formato (grande o cajita) y teléfono para confirmar el pedido."
+      flavor: "vainilla tostada",
+    }, "web"),
+    "Para dejarlo confirmado necesito el formato, tu nombre y tu teléfono."
   )
 })
