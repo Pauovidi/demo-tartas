@@ -24,6 +24,55 @@ export type Flavor = {
   cajita?: Product
 }
 
+const PRODUCT_IMAGE_LIBRARY: Record<
+  string,
+  {
+    tarta: string[]
+    cajita: string[]
+  }
+> = {
+  "vainilla-tostada": {
+    tarta: ["/images/tarta-clasica-1.jpg", "/images/tarta-clasica-2.jpg", "/images/tarta-clasica-3.jpg"],
+    cajita: ["/images/cajita-clasica-1.jpg", "/images/clasica-slice.jpg"],
+  },
+  "pistacho-verde": {
+    tarta: ["/images/tarta-pistacho-1.jpg", "/images/tarta-pistacho-2.jpg", "/images/tarta-pistacho-3.jpg"],
+    cajita: ["/images/cajita-pistacho-1.jpg"],
+  },
+  "cacao-ahumado": {
+    tarta: ["/images/tarta-chocolate-1.jpg", "/images/tarta-chocolate-2.jpg", "/images/tarta-chocolate-3.jpg"],
+    cajita: ["/images/cajita-chocolate-1.jpg"],
+  },
+  "limon-crema": {
+    tarta: ["/images/tarta-mango-1.jpg", "/images/tarta-matcha-2.jpg", "/images/tarta-frutos-rojos-2.jpg"],
+    cajita: ["/images/cajita-mango-1.png"],
+  },
+  "higo-miel": {
+    tarta: ["/images/tarta-lotus-1.jpg", "/images/tarta-lotus-2.jpg", "/images/tarta-lotus-3.jpg"],
+    cajita: ["/images/cajita-lotus-1.jpg"],
+  },
+  "cafe-avellana": {
+    tarta: ["/images/tarta-oreo-1.jpg", "/images/tarta-oreo-2.jpg", "/images/tarta-oreo-3.jpg"],
+    cajita: ["/images/cajita-oreo-1.jpg"],
+  },
+  "mandarina-salvia": {
+    tarta: ["/images/tarta-matcha-1.jpg", "/images/tarta-matcha-2.jpg", "/images/tarta-matcha-3.jpg"],
+    cajita: ["/images/cajita-matcha-1.jpg"],
+  },
+  "frambuesa-blanca": {
+    tarta: ["/images/tarta-frutos-rojos-1.jpg", "/images/tarta-frutos-rojos-2.jpg", "/images/tarta-frutos-rojos-3.jpg"],
+    cajita: ["/images/cajita-frutos-rojos-1.jpg"],
+  },
+  "caramelo-marino": {
+    tarta: ["/images/tarta-dulce-leche-1.jpg", "/images/tarta-dulce-leche-2.jpg", "/images/tarta-dulce-leche-3.jpg"],
+    cajita: ["/images/cajita-dulce-leche-1.jpg"],
+  },
+}
+
+function getProductImages(category: string, format: "tarta" | "cajita") {
+  return PRODUCT_IMAGE_LIBRARY[category]?.[format] ?? ["/images/placeholder-tarta.jpg"]
+}
+
 export const products: Product[] = [
   {
     id: "petit-vainilla-tostada",
@@ -37,7 +86,7 @@ export const products: Product[] = [
     fullDescription: "Formato Petit de 450 g. Textura cremosa, vainilla natural y final tostado.",
     portionInfo: "2-3 raciones",
     weightInfo: "450 g",
-    images: ["/images/products/vainilla-tostada.svg"],
+    images: getProductImages("vainilla-tostada", "cajita"),
     featured: true,
   },
   {
@@ -52,7 +101,7 @@ export const products: Product[] = [
     fullDescription: "Formato Petit de 450 g. Intensidad de pistacho y acabado suave.",
     portionInfo: "2-3 raciones",
     weightInfo: "450 g",
-    images: ["/images/products/pistacho-verde.svg"],
+    images: getProductImages("pistacho-verde", "cajita"),
     featured: true,
   },
   {
@@ -67,7 +116,7 @@ export const products: Product[] = [
     fullDescription: "Formato Petit de 450 g. Queso cremoso, cacao intenso y acabado ahumado.",
     portionInfo: "2-3 raciones",
     weightInfo: "450 g",
-    images: ["/images/products/cacao-ahumado.svg"],
+    images: getProductImages("cacao-ahumado", "cajita"),
     featured: true,
   },
   {
@@ -82,7 +131,7 @@ export const products: Product[] = [
     fullDescription: "Formato Petit de 450 g. Más cítrico, ligero y muy cremoso.",
     portionInfo: "2-3 raciones",
     weightInfo: "450 g",
-    images: ["/images/products/limon-crema.svg"],
+    images: getProductImages("limon-crema", "cajita"),
     featured: false,
   },
   {
@@ -97,7 +146,7 @@ export const products: Product[] = [
     fullDescription: "Formato Petit de 450 g. Dulzor delicado y fondo floral.",
     portionInfo: "2-3 raciones",
     weightInfo: "450 g",
-    images: ["/images/products/higo-miel.svg"],
+    images: getProductImages("higo-miel", "cajita"),
     featured: false,
   },
   {
@@ -112,7 +161,7 @@ export const products: Product[] = [
     fullDescription: "Formato Petit de 450 g. Perfil redondo y tostado.",
     portionInfo: "2-3 raciones",
     weightInfo: "450 g",
-    images: ["/images/products/cafe-avellana.svg"],
+    images: getProductImages("cafe-avellana", "cajita"),
     featured: false,
   },
   {
@@ -127,7 +176,7 @@ export const products: Product[] = [
     fullDescription: "Formato Petit de 450 g. Brillante, cítrico y elegante.",
     portionInfo: "2-3 raciones",
     weightInfo: "450 g",
-    images: ["/images/products/mandarina-salvia.svg"],
+    images: getProductImages("mandarina-salvia", "cajita"),
     featured: false,
   },
   {
@@ -142,7 +191,7 @@ export const products: Product[] = [
     fullDescription: "Formato Petit de 450 g. Fruta roja, dulzor fino y textura densa.",
     portionInfo: "2-3 raciones",
     weightInfo: "450 g",
-    images: ["/images/products/frambuesa-blanca.svg"],
+    images: getProductImages("frambuesa-blanca", "cajita"),
     featured: false,
   },
   {
@@ -157,7 +206,7 @@ export const products: Product[] = [
     fullDescription: "Formato Petit de 450 g. Dulzor envolvente y textura de horno lento.",
     portionInfo: "2-3 raciones",
     weightInfo: "450 g",
-    images: ["/images/products/caramelo-marino.svg"],
+    images: getProductImages("caramelo-marino", "cajita"),
     featured: false,
   },
   {
@@ -175,7 +224,7 @@ export const products: Product[] = [
     fullDescription: "Formato Mesa de 1,8 kg. 10-12 raciones. Vainilla natural y borde tostado.",
     portionInfo: "10-12 raciones",
     weightInfo: "1,8 kg",
-    images: ["/images/products/vainilla-tostada.svg"],
+    images: getProductImages("vainilla-tostada", "tarta"),
     featured: true,
   },
   {
@@ -193,7 +242,7 @@ export const products: Product[] = [
     fullDescription: "Formato Mesa de 1,8 kg. 10-12 raciones. Pistacho tostado y textura aterciopelada.",
     portionInfo: "10-12 raciones",
     weightInfo: "1,8 kg",
-    images: ["/images/products/pistacho-verde.svg"],
+    images: getProductImages("pistacho-verde", "tarta"),
     featured: true,
   },
   {
@@ -211,7 +260,7 @@ export const products: Product[] = [
     fullDescription: "Formato Mesa de 1,8 kg. 10-12 raciones. Cacao intenso y tostado fino.",
     portionInfo: "10-12 raciones",
     weightInfo: "1,8 kg",
-    images: ["/images/products/cacao-ahumado.svg"],
+    images: getProductImages("cacao-ahumado", "tarta"),
     featured: true,
   },
   {
@@ -229,7 +278,7 @@ export const products: Product[] = [
     fullDescription: "Formato Mesa de 1,8 kg. 10-12 raciones. Limón confitado y base fina.",
     portionInfo: "10-12 raciones",
     weightInfo: "1,8 kg",
-    images: ["/images/products/limon-crema.svg"],
+    images: getProductImages("limon-crema", "tarta"),
     featured: false,
   },
   {
@@ -247,7 +296,7 @@ export const products: Product[] = [
     fullDescription: "Formato Mesa de 1,8 kg. 10-12 raciones. Miel floral e higo maduro.",
     portionInfo: "10-12 raciones",
     weightInfo: "1,8 kg",
-    images: ["/images/products/higo-miel.svg"],
+    images: getProductImages("higo-miel", "tarta"),
     featured: false,
   },
   {
@@ -265,7 +314,7 @@ export const products: Product[] = [
     fullDescription: "Formato Mesa de 1,8 kg. 10-12 raciones. Café suave y fondo tostado.",
     portionInfo: "10-12 raciones",
     weightInfo: "1,8 kg",
-    images: ["/images/products/cafe-avellana.svg"],
+    images: getProductImages("cafe-avellana", "tarta"),
     featured: false,
   },
   {
@@ -283,7 +332,7 @@ export const products: Product[] = [
     fullDescription: "Formato Mesa de 1,8 kg. 10-12 raciones. Mandarina fresca y salvia suave.",
     portionInfo: "10-12 raciones",
     weightInfo: "1,8 kg",
-    images: ["/images/products/mandarina-salvia.svg"],
+    images: getProductImages("mandarina-salvia", "tarta"),
     featured: false,
   },
   {
@@ -301,7 +350,7 @@ export const products: Product[] = [
     fullDescription: "Formato Mesa de 1,8 kg. 10-12 raciones. Frambuesa y crema blanca.",
     portionInfo: "10-12 raciones",
     weightInfo: "1,8 kg",
-    images: ["/images/products/frambuesa-blanca.svg"],
+    images: getProductImages("frambuesa-blanca", "tarta"),
     featured: false,
   },
   {
@@ -319,7 +368,7 @@ export const products: Product[] = [
     fullDescription: "Formato Mesa de 1,8 kg. 10-12 raciones. Caramelo delicado y sal marina.",
     portionInfo: "10-12 raciones",
     weightInfo: "1,8 kg",
-    images: ["/images/products/caramelo-marino.svg"],
+    images: getProductImages("caramelo-marino", "tarta"),
     featured: false,
   },
 ]

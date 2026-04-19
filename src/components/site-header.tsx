@@ -2,123 +2,133 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { useState } from "react"
-import { ArrowUpRight, Menu, ShoppingBag, X } from "lucide-react"
+import { useCallback, useEffect, useState } from "react"
 
+import { cn } from "@/lib/utils"
 import { useCart } from "@/src/context/cart-context"
 
-const navLinks = [
-  { href: "/", label: "Inicio" },
-  { href: "/productos", label: "Colección" },
-  { href: "/faqs", label: "FAQ" },
-  { href: "/prensa", label: "Notas" },
+const navItems = [
+  { label: "inicio", href: "/" },
+  { label: "nuestras tartas y cajitas", href: "/productos" },
 ]
+
+const mobileItems = [...navItems, { label: "preguntas frecuentes", href: "/faqs" }, { label: "notas", href: "/prensa" }]
 
 export function SiteHeader() {
   const { totalItems, openCart } = useCart()
+  const [logoHidden, setLogoHidden] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
 
+  const handleScroll = useCallback(() => {
+    setLogoHidden(window.scrollY > 50)
+  }, [])
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [handleScroll])
+
   return (
-    <header className="sticky top-0 z-40 bg-[linear-gradient(180deg,rgba(251,245,239,0.94),rgba(251,245,239,0.74))] px-3 pt-3 backdrop-blur-xl md:px-5">
-      <div className="rounded-[2rem] border border-white/65 bg-[linear-gradient(180deg,rgba(255,251,247,0.95),rgba(255,247,240,0.82))] shadow-[0_24px_80px_-44px_rgba(46,36,31,0.72)]">
-        <div className="flex items-center justify-between rounded-t-[2rem] border-b border-foreground/8 bg-white/45 px-5 py-2 text-[10px] font-medium uppercase tracking-[0.32em] text-muted-foreground md:px-7">
-          <span>Portfolio demo</span>
-          <span className="hidden sm:inline">Rebrand visual · checkout y chat preservados</span>
+    <>
+      <header className="fixed top-0 left-0 w-full p-sides grid grid-cols-3 md:grid-cols-12 md:gap-sides z-50 items-start">
+        <div className="block flex-none md:hidden">
+          <button
+            type="button"
+            onClick={() => setMobileOpen(true)}
+            className="inline-flex items-center rounded-md bg-secondary px-3 py-2 text-sm font-semibold uppercase"
+          >
+            Menu
+          </button>
         </div>
 
-        <div className="page-shell">
-          <div className="flex min-h-[92px] items-center justify-between gap-4 py-4">
-            <Link href="/" className="flex min-w-0 items-center gap-4">
-              <div className="hidden rounded-full border border-foreground/10 bg-white/70 px-3 py-1 text-[10px] uppercase tracking-[0.3em] text-muted-foreground md:inline-flex">
-                Maison pâtisserie
-              </div>
-              <div className="min-w-0">
-                <Image
-                  src="/brand/logo.svg"
-                  alt="Casa Bruna"
-                  width={220}
-                  height={65}
-                  className="h-11 w-auto md:h-14"
-                  priority
-                />
-              </div>
-            </Link>
-
-            <nav
-              className="hidden items-center gap-2 rounded-full border border-foreground/10 bg-white/70 px-3 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.65)] lg:flex"
-              aria-label="Navegación principal"
-            >
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="rounded-full px-4 py-2 text-sm font-medium text-foreground/78 transition-all hover:bg-secondary hover:text-foreground"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-
-            <div className="flex items-center gap-2 md:gap-3">
-              <Link
-                href="/#atelier-contact"
-                className="hidden items-center gap-2 rounded-full border border-foreground/12 bg-white/72 px-4 py-2.5 text-sm font-semibold text-foreground transition-all hover:-translate-y-0.5 hover:bg-white md:inline-flex"
-              >
-                Reservas demo
-                <ArrowUpRight className="h-4 w-4" />
-              </Link>
-              <button
-                onClick={openCart}
-                className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(135deg,#2e241f,#5d473d)] px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-[0_18px_36px_-24px_rgba(46,36,31,0.85)] transition-all hover:-translate-y-0.5"
-              >
-                <ShoppingBag className="h-4 w-4" />
-                Pedido ({totalItems})
-              </button>
-              <button
-                onClick={() => setMobileOpen((prev) => !prev)}
-                className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-foreground/12 bg-white/80 text-foreground shadow-[0_12px_28px_-22px_rgba(46,36,31,0.8)] lg:hidden"
-                aria-label={mobileOpen ? "Cerrar menú" : "Abrir menú"}
-              >
-                {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {mobileOpen && (
-        <nav
-          className="page-shell mt-3 rounded-[2rem] border border-white/70 bg-[linear-gradient(180deg,rgba(255,250,246,0.96),rgba(248,238,229,0.92))] px-5 py-5 shadow-[0_28px_60px_-44px_rgba(46,36,31,0.75)] lg:hidden"
-          aria-label="Navegación móvil"
+        <Link
+          href="/"
+          className={cn(
+            "md:col-span-2 transition-opacity duration-300 flex justify-center md:justify-start",
+            logoHidden ? "opacity-0 pointer-events-none" : "opacity-100"
+          )}
         >
-          <div className="mb-4 flex items-center justify-between border-b border-foreground/8 pb-4">
-            <p className="text-[11px] uppercase tracking-[0.28em] text-muted-foreground">
-              Navegación
-            </p>
-            <Link
-              href="/#atelier-contact"
-              onClick={() => setMobileOpen(false)}
-              className="text-xs font-semibold uppercase tracking-[0.18em] text-foreground"
-            >
-              Reservas
-            </Link>
-          </div>
-          <ul className="space-y-3">
-            {navLinks.map((link) => (
-              <li key={link.href}>
+          <Image
+            src="/brand/logo.svg"
+            alt="Casa Bruna"
+            width={320}
+            height={88}
+            priority
+            className="h-6 w-auto md:h-auto md:max-w-[320px]"
+          />
+        </Link>
+
+        <nav className="flex items-center md:col-span-10 justify-end gap-2">
+          <ul className="items-center gap-5 py-0.5 px-3 bg-background/10 rounded-sm backdrop-blur-md hidden md:flex">
+            {navItems.map((item) => (
+              <li key={item.href}>
                 <Link
-                  href={link.href}
-                  onClick={() => setMobileOpen(false)}
-                  className="flex items-center justify-between rounded-[1.5rem] border border-foreground/10 bg-white/80 px-4 py-3.5 text-sm font-semibold text-foreground shadow-[inset_0_1px_0_rgba(255,255,255,0.72)]"
+                  href={item.href}
+                  className="font-semibold text-base transition-colors duration-200 uppercase text-foreground/70 hover:text-foreground"
                 >
-                  {link.label}
-                  <ArrowUpRight className="h-4 w-4 text-muted-foreground" />
+                  {item.label}
                 </Link>
               </li>
             ))}
           </ul>
+          <button
+            type="button"
+            aria-label="Abrir carrito"
+            onClick={openCart}
+            className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold uppercase text-primary-foreground"
+          >
+            carrito <span>({totalItems})</span>
+          </button>
         </nav>
-      )}
-    </header>
+      </header>
+
+      {mobileOpen ? (
+        <>
+          <div
+            className="fixed inset-0 bg-foreground/30 z-50"
+            onClick={() => setMobileOpen(false)}
+            aria-hidden="true"
+          />
+          <div className="fixed top-0 bottom-0 left-0 flex w-full md:w-[400px] p-modal-sides z-50">
+            <div className="flex flex-col bg-muted p-3 md:p-4 rounded w-full">
+              <div className="pl-2 flex items-baseline justify-between mb-10">
+                <p className="text-2xl font-semibold uppercase">Menu</p>
+                <button
+                  type="button"
+                  className="text-sm font-medium uppercase"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Close
+                </button>
+              </div>
+
+              <nav className="grid grid-cols-2 gap-x-6 gap-y-4 mb-10">
+                {mobileItems.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setMobileOpen(false)}
+                    className="inline-flex rounded-md bg-background/50 px-3 py-2 text-sm font-semibold uppercase"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </nav>
+
+              <div className="mt-auto mb-6">
+                <p className="italic tracking-tighter text-base">
+                  Horneado lento para sobremesas memorables.
+                </p>
+                <div className="mt-5 text-base leading-tight">
+                  <p>Shell público basado en v0.</p>
+                  <p>Catálogo, carrito y checkout demo intactos.</p>
+                  <p>Branding portfolio-safe sin rastros de la marca original.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      ) : null}
+    </>
   )
 }

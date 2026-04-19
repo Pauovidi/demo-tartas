@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
 import { useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
@@ -10,13 +11,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { earliestPickupDateISO, formatDateEs } from "@/lib/chatbot/date-rules"
 import { getOrderPickupDateErrorMessage, validateOrderPickupDate } from "@/lib/pickup-date-validation"
-import {
-  BRAND_NAME,
-  CLOSED_PICKUP_DAYS_COPY,
-  DEMO_DISCLAIMER,
-  getCustomerFacingFormatLabel,
-  PICKUP_ONLY_COPY,
-} from "@/src/data/business"
+import { BRAND_NAME, CLOSED_PICKUP_DAYS_COPY } from "@/src/data/business"
 import { useCart } from "@/src/context/cart-context"
 
 const checkoutSchema = z.object({
@@ -37,6 +32,7 @@ export function CheckoutSummary({ leadDays, shopTimeZone }: CheckoutSummaryProps
   const router = useRouter()
   const { items, subtotal, clearCart } = useCart()
   const [loading, setLoading] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
   const [customerName, setCustomerName] = useState("")
   const [phone, setPhone] = useState("")
   const [deliveryDate, setDeliveryDate] = useState("")
@@ -55,30 +51,6 @@ export function CheckoutSummary({ leadDays, shopTimeZone }: CheckoutSummaryProps
     () => earliestPickupDateISO(new Date(), leadDays, shopTimeZone),
     [leadDays, shopTimeZone]
   )
-  const pickupDateHelpText = `Reserva con mínimo ${leadDays} días de antelación y ten en cuenta que ${CLOSED_PICKUP_DAYS_COPY}. Primera fecha disponible: ${formatDateEs(earliestPickupDate, shopTimeZone)}.`
-
-  if (items.length === 0) {
-    return (
-      <section className="pb-20 pt-10 md:pb-24 md:pt-14">
-        <div className="page-shell">
-          <div className="showcase-panel flex flex-col items-center gap-6 py-14 text-center">
-            <p className="font-display text-4xl text-foreground md:text-5xl">
-              No hay piezas en el pedido.
-            </p>
-            <p className="max-w-lg text-sm leading-7 text-muted-foreground">
-              Añade primero una selección desde catálogo para probar el flujo completo de checkout.
-            </p>
-            <Link
-              href="/productos"
-              className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground"
-            >
-              Ir a colección
-            </Link>
-          </div>
-        </div>
-      </section>
-    )
-  }
 
   function validateDeliveryDate(value: string) {
     const validation = validateOrderPickupDate(value || undefined, new Date(), leadDays, shopTimeZone)
@@ -93,21 +65,37 @@ export function CheckoutSummary({ leadDays, shopTimeZone }: CheckoutSummaryProps
     return { ...validation, message }
   }
 
-  function handleDeliveryDateChange(nextValue: string) {
-    if (!nextValue) {
-      setDeliveryDate("")
-      setDeliveryDateError("La fecha de recogida es obligatoria.")
-      return
-    }
+  if (submitted) {
+    return (
+      <div className="min-h-[60vh] flex flex-col items-center justify-center gap-6 px-6 pt-top-spacing">
+        <div className="size-16 rounded-full bg-green-100 flex items-center justify-center">
+          <span className="text-3xl text-green-600">✓</span>
+        </div>
+        <h1 className="text-2xl font-semibold text-center text-balance">Pedido recibido</h1>
+        <p className="text-muted-foreground text-center max-w-md text-balance">
+          Hemos registrado tu pedido demo y la fecha validada de recogida.
+        </p>
+        <div className="flex gap-3">
+          <Link href="/productos" className="inline-flex rounded-md border border-border px-4 py-3 text-sm font-semibold">
+            Seguir comprando
+          </Link>
+          <Link href="/" className="inline-flex rounded-md bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground">
+            Volver al inicio
+          </Link>
+        </div>
+      </div>
+    )
+  }
 
-    const validation = validateDeliveryDate(nextValue)
-    if (validation.kind !== "valid") {
-      setDeliveryDate("")
-      toast.error(validation.message)
-      return
-    }
-
-    setDeliveryDate(validation.pickupDate)
+  if (!items.length) {
+    return (
+      <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4 px-6 pt-top-spacing">
+        <h1 className="text-2xl font-semibold">Tu carrito está vacío</h1>
+        <Link href="/productos" className="inline-flex rounded-md bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground">
+          Ver tartas
+        </Link>
+      </div>
+    )
   }
 
   async function handleConfirmOrder() {
@@ -142,15 +130,12 @@ export function CheckoutSummary({ leadDays, shopTimeZone }: CheckoutSummaryProps
       })
 
       const data = await response.json()
-
       if (!response.ok || !data.ok) {
         throw new Error(data.error ?? "No se pudo crear el pedido")
       }
 
       clearCart()
-      const finalDate = data.delivery_date_final as string | undefined
-      toast.success(`Pedido demo creado para ${finalDate}. ${PICKUP_ONLY_COPY}`)
-      router.push("/")
+      setSubmitted(true)
       router.refresh()
     } catch (error) {
       const message = error instanceof Error ? error.message : "Error al crear pedido"
@@ -161,141 +146,105 @@ export function CheckoutSummary({ leadDays, shopTimeZone }: CheckoutSummaryProps
   }
 
   return (
-    <section className="pb-20 pt-8 md:pb-24 md:pt-10">
-      <div className="page-shell grid gap-6 xl:grid-cols-[0.96fr_1.04fr]">
-        <div className="space-y-6">
-          <div className="showcase-panel p-6 md:p-8 lg:p-10">
-            <p className="editorial-kicker">Checkout demo</p>
-            <h1 className="mt-4 font-display text-5xl leading-none text-foreground md:text-6xl xl:text-7xl">
-              Reserva tu selección
-            </h1>
-            <p className="mt-5 max-w-2xl text-sm leading-8 text-muted-foreground">
-              {BRAND_NAME} utiliza aquí el mismo flujo técnico de validación, carrito y creación de
-              pedido, pero con marca, datos y copy ficticios.
+    <div className="pt-top-spacing pb-12 px-6 max-w-2xl mx-auto">
+      <h1 className="text-3xl font-semibold mb-2">Finalizar pedido</h1>
+      <p className="text-muted-foreground mb-8 text-sm">
+        {BRAND_NAME}. Reserva con mínimo {leadDays} días de antelación; {CLOSED_PICKUP_DAYS_COPY}.
+        Primera fecha disponible: {formatDateEs(earliestPickupDate, shopTimeZone)}.
+      </p>
+
+      <div className="space-y-4 mb-8">
+        {items.map((item) => (
+          <div
+            key={item.product.id}
+            className="flex items-center gap-4 bg-card rounded-lg p-3 border border-border"
+          >
+            <div className="relative size-16 shrink-0 rounded overflow-hidden bg-secondary">
+              <Image
+                src={item.product.images[0]}
+                alt={item.product.name}
+                fill
+                className="object-cover"
+              />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="font-medium truncate uppercase">{item.product.name}</p>
+              <p className="text-sm text-muted-foreground">Cantidad: {item.quantity}</p>
+            </div>
+            <p className="font-semibold shrink-0">
+              {(item.product.priceValue * item.quantity).toFixed(2)} €
             </p>
-            <div className="mt-8 grid gap-3 md:grid-cols-3">
-              <div className="rounded-[1.5rem] border border-white/75 bg-white/76 p-4">
-                <p className="editorial-kicker">Paso 1</p>
-                <p className="mt-3 text-sm leading-6 text-foreground">Revisa tu selección y datos.</p>
-              </div>
-              <div className="rounded-[1.5rem] border border-white/75 bg-white/76 p-4">
-                <p className="editorial-kicker">Paso 2</p>
-                <p className="mt-3 text-sm leading-6 text-foreground">
-                  Valida fecha con antelación mínima y días abiertos.
-                </p>
-              </div>
-              <div className="rounded-[1.5rem] border border-white/75 bg-white/76 p-4">
-                <p className="editorial-kicker">Paso 3</p>
-                <p className="mt-3 text-sm leading-6 text-foreground">
-                  Crea el pedido demo y limpia el carrito local.
-                </p>
-              </div>
-            </div>
           </div>
+        ))}
+      </div>
 
-          <div className="paper-panel p-6 md:p-8">
-            <div className="grid gap-5 md:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="customer-name">Nombre *</Label>
-                <Input
-                  id="customer-name"
-                  value={customerName}
-                  onChange={(e) => setCustomerName(e.target.value)}
-                  placeholder="Nombre para la reserva demo"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="customer-phone">Teléfono *</Label>
-                <Input
-                  id="customer-phone"
-                  required
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="600 000 000"
-                />
-              </div>
-              <div className="space-y-2 md:col-span-2">
-                <Label htmlFor="delivery-date">Fecha de recogida *</Label>
-                <Input
-                  id="delivery-date"
-                  type="date"
-                  required
-                  min={earliestPickupDate}
-                  value={deliveryDate}
-                  aria-invalid={deliveryDateError ? "true" : "false"}
-                  onChange={(e) => handleDeliveryDateChange(e.target.value)}
-                />
-                <p className={`text-xs ${deliveryDateError ? "text-destructive" : "text-muted-foreground"}`}>
-                  {deliveryDateError ?? pickupDateHelpText}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-2">
-            <div className="paper-panel p-6">
-              <p className="editorial-kicker">Operativa</p>
-              <p className="mt-3 text-sm leading-7 text-muted-foreground">{pickupDateHelpText}</p>
-            </div>
-            <div className="paper-panel p-6">
-              <p className="editorial-kicker">Importante</p>
-              <p className="mt-3 text-sm leading-7 text-muted-foreground">{PICKUP_ONLY_COPY}</p>
-            </div>
-          </div>
+      <div className="space-y-4 mb-8">
+        <div className="space-y-2">
+          <Label htmlFor="customer-name">Nombre *</Label>
+          <Input
+            id="customer-name"
+            value={customerName}
+            onChange={(event) => setCustomerName(event.target.value)}
+            placeholder="Nombre para la reserva demo"
+          />
         </div>
-
-        <div className="space-y-6 xl:sticky xl:top-28 xl:self-start">
-          <div className="showcase-panel p-6 md:p-8">
-            <div className="flex items-center justify-between">
-              <p className="editorial-kicker">Resumen del pedido</p>
-              <span className="rounded-full bg-secondary px-3 py-1 text-xs font-medium text-foreground">
-                {items.length} líneas
-              </span>
-            </div>
-
-            <div className="mt-5 space-y-4">
-              {items.map((item) => (
-                <div
-                  key={item.product.id}
-                  className="rounded-[1.6rem] border border-white/80 bg-white/82 p-4"
-                >
-                  <div className="flex items-center justify-between gap-3">
-                    <div>
-                      <p className="text-lg font-semibold text-foreground">{item.product.name}</p>
-                      <p className="mt-1 text-sm text-muted-foreground">
-                        {getCustomerFacingFormatLabel(item.product.format)} · Cantidad: {item.quantity}
-                      </p>
-                    </div>
-                    <p className="text-sm font-semibold text-foreground">
-                      {(item.product.priceValue * item.quantity).toFixed(2)} €
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="soft-divider mt-6 h-px w-full" />
-            <div className="mt-6 flex items-center justify-between">
-              <span className="text-sm font-semibold text-muted-foreground">Total</span>
-              <span className="text-2xl font-semibold text-foreground">{subtotal.toFixed(2)} €</span>
-            </div>
-
-            <button
-              onClick={handleConfirmOrder}
-              disabled={loading}
-              className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              {loading ? "Creando pedido demo..." : "Confirmar pedido demo"}
-            </button>
-          </div>
-
-          <div className="paper-panel p-6 md:p-8">
-            <p className="editorial-kicker text-accent">Nota importante</p>
-            <p className="mt-3 text-sm leading-7 text-muted-foreground">{PICKUP_ONLY_COPY}</p>
-            <p className="mt-3 text-sm leading-7 text-muted-foreground">{DEMO_DISCLAIMER}</p>
-          </div>
+        <div className="space-y-2">
+          <Label htmlFor="customer-phone">Teléfono *</Label>
+          <Input
+            id="customer-phone"
+            value={phone}
+            onChange={(event) => setPhone(event.target.value)}
+            placeholder="600 000 000"
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="delivery-date">Fecha de recogida *</Label>
+          <Input
+            id="delivery-date"
+            type="date"
+            min={earliestPickupDate}
+            value={deliveryDate}
+            aria-invalid={deliveryDateError ? "true" : "false"}
+            onChange={(event) => {
+              const value = event.target.value
+              setDeliveryDate(value)
+              if (value) validateDeliveryDate(value)
+            }}
+          />
+          <p className={`text-xs ${deliveryDateError ? "text-destructive" : "text-muted-foreground"}`}>
+            {deliveryDateError ?? `Reserva con mínimo ${leadDays} días de antelación.`}
+          </p>
         </div>
       </div>
-    </section>
+
+      <div className="border-t border-border pt-4 space-y-2 mb-8">
+        <div className="flex justify-between text-sm">
+          <span className="text-muted-foreground">Subtotal</span>
+          <span>{subtotal.toFixed(2)} €</span>
+        </div>
+        <div className="flex justify-between text-sm">
+          <span className="text-muted-foreground">Recogida</span>
+          <span className="text-muted-foreground">Se coordina tras confirmar</span>
+        </div>
+        <div className="flex justify-between text-lg font-semibold pt-2 border-t border-border">
+          <span>Total</span>
+          <span>{subtotal.toFixed(2)} €</span>
+        </div>
+      </div>
+
+      <div className="space-y-3">
+        <button
+          type="button"
+          disabled={loading}
+          className="w-full inline-flex items-center justify-center rounded-md bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground disabled:opacity-60"
+          onClick={() => void handleConfirmOrder()}
+        >
+          {loading ? "Procesando..." : "Confirmar pedido"}
+        </button>
+        <p className="text-xs text-center text-muted-foreground">
+          El pedido demo sigue usando la validación real de fecha y el endpoint `/api/orders`.
+        </p>
+      </div>
+    </div>
   )
 }

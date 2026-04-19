@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next"
-import { Cormorant_Garamond, Manrope } from "next/font/google"
+import { Geist, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 
 import {
@@ -11,16 +11,14 @@ import {
 
 import "./globals.css"
 
-const displayFont = Cormorant_Garamond({
+const geistSans = Geist({
+  variable: "--font-geist-sans",
   subsets: ["latin"],
-  variable: "--font-display",
-  weight: ["500", "600", "700"],
 })
 
-const sansFont = Manrope({
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
   subsets: ["latin"],
-  variable: "--font-sans",
-  weight: ["400", "500", "600", "700"],
 })
 
 export const metadata: Metadata = {
@@ -67,7 +65,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: "#221A14",
+  themeColor: "#FBCB96",
   width: "device-width",
   initialScale: 1,
 }
@@ -79,7 +77,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className={`${displayFont.variable} ${sansFont.variable} font-sans antialiased`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen`}
+        suppressHydrationWarning
+      >
         {children}
         <Analytics />
       </body>

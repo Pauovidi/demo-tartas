@@ -1,13 +1,5 @@
-import { HeroSection } from "@/src/components/home/hero-section"
-import { ManifestoSection } from "@/src/components/home/manifesto-section"
-import { FeaturedProducts } from "@/src/components/home/featured-products"
+import { HomeShell } from "@/src/components/home-shell"
 
 export default function HomePage() {
-  return (
-    <>
-      <HeroSection />
-      <ManifestoSection />
-      <FeaturedProducts />
-    </>
-  )
+  return <HomeShell />
 }

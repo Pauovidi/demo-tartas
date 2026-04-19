@@ -1,264 +1,199 @@
 "use client"
 
+import Link from "next/link"
 import Image from "next/image"
-import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
-import { Minus, Plus } from "lucide-react"
+import { useEffect, useMemo, useState } from "react"
+import useEmblaCarousel from "embla-carousel-react"
 
 import { useCart } from "@/src/context/cart-context"
-import { getCustomerFacingFormatLabel, PICKUP_ONLY_COPY } from "@/src/data/business"
 import type { Product } from "@/src/data/products"
 import { getSibling } from "@/src/data/products"
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
 
 interface ProductDetailProps {
   product: Product
 }
 
-const ALLERGEN_BADGES = [
-  { key: "leche", label: "Leche" },
-  { key: "huevo", label: "Huevo" },
-  { key: "gluten", label: "Gluten" },
-  { key: "frutos", label: "Frutos de cáscara" },
-  { key: "soja", label: "Soja" },
-] as const
-
-function getAllergenBadges(allergens?: string) {
-  if (!allergens) return []
-
-  const normalized = allergens
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-
-  return ALLERGEN_BADGES.filter((item) => normalized.includes(item.key))
-}
-
 export function ProductDetail({ product }: ProductDetailProps) {
-  const [quantity, setQuantity] = useState(1)
   const { addItem } = useCart()
-  const router = useRouter()
   const sibling = getSibling(product)
-  const hasBothFormats = !!sibling
-  const allergenBadges = getAllergenBadges(product.allergens)
+  const [selectedProduct, setSelectedProduct] = useState(product)
+  const images = useMemo(() => selectedProduct.images, [selectedProduct])
+  const [emblaRef, emblaApi] = useEmblaCarousel({ align: "start", loop: false })
+  const [selectedIndex, setSelectedIndex] = useState(0)
 
   useEffect(() => {
-    if (hasBothFormats && product.format === "cajita" && sibling) {
-      router.replace(`/producto/${sibling.slug}`)
-    }
-  }, [hasBothFormats, product.format, router, sibling])
+    setSelectedProduct(product)
+  }, [product])
 
-  function switchFormat(format: "tarta" | "cajita") {
-    if (format === product.format) return
-    if (sibling) router.push(`/producto/${sibling.slug}`)
-  }
+  useEffect(() => {
+    if (!emblaApi) return
+    const sync = () => setSelectedIndex(emblaApi.selectedScrollSnap())
+    sync()
+    emblaApi.on("select", sync)
+  }, [emblaApi])
 
-  const tastingNotes = [
-    product.weightInfo,
-    product.portionInfo,
-    product.allergens ? "Consulta alérgenos en detalle abajo" : "Perfil clásico de queso horneado",
-  ].filter(Boolean)
+  const breadcrumbLabel = selectedProduct.format === "tarta" ? "Tartas" : "Cajitas"
 
   return (
-    <section className="pb-16 pt-8 md:pb-24 md:pt-10">
-      <div className="page-shell grid gap-6 xl:grid-cols-[0.88fr_1.12fr]">
-        <div className="xl:sticky xl:top-28">
-          <div className="showcase-panel overflow-hidden p-4 md:p-5">
-            <div className="relative aspect-[4/4.5] overflow-hidden rounded-[1.9rem] bg-secondary">
-              <div className="absolute inset-0 bg-gradient-to-t from-[#221a14]/18 via-transparent to-transparent" />
-              {product.images.length > 0 ? (
-                <Image
-                  src={product.images[0]}
-                  alt={product.name}
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              ) : (
-                <div className="flex h-full items-center justify-center p-8 text-center text-sm text-muted-foreground">
-                  Imagen editorial en preparación
-                </div>
-              )}
-              <span className="absolute left-4 top-4 rounded-full bg-white/85 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-foreground">
-                {getCustomerFacingFormatLabel(product.format)}
-              </span>
+    <div className="bg-muted">
+      <div className="flex flex-col md:grid md:grid-cols-12 md:gap-sides">
+        <div className="md:hidden col-span-full h-[60vh] min-h-[400px]">
+          <div className="relative w-full h-full">
+            <div className="overflow-hidden h-full" ref={emblaRef}>
+              <div className="flex h-full">
+                {images.map((image, index) => (
+                  <div key={`${image}-${index}`} className="flex-shrink-0 w-full h-full relative">
+                    <Image
+                      src={image}
+                      alt={selectedProduct.name}
+                      fill
+                      className="w-full h-full object-cover"
+                      priority={index === 0}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+            {images.length > 1 ? (
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10">
+                <span className="inline-flex rounded-full border border-white/30 bg-black/55 px-3 py-1 text-xs text-white">
+                  {selectedIndex + 1}/{images.length}
+                </span>
+              </div>
+            ) : null}
+          </div>
+        </div>
 
-              {hasBothFormats && (
-                <div className="absolute bottom-4 left-4 inline-flex rounded-full border border-white/30 bg-[#221a14]/75 p-1 backdrop-blur">
-                  <button
-                    onClick={() => switchFormat("tarta")}
-                    className={`rounded-full px-4 py-2 text-xs font-semibold transition-colors ${
-                      product.format === "tarta" ? "bg-white text-foreground" : "text-white/72"
-                    }`}
-                  >
-                    Mesa
-                  </button>
-                  <button
-                    onClick={() => switchFormat("cajita")}
-                    className={`rounded-full px-4 py-2 text-xs font-semibold transition-colors ${
-                      product.format === "cajita" ? "bg-white text-foreground" : "text-white/72"
-                    }`}
-                  >
-                    Petit
-                  </button>
-                </div>
-              )}
+        <div className="col-span-5 flex flex-col 2xl:col-span-4 max-md:col-span-full md:h-screen max-md:p-sides md:pl-sides md:pt-top-spacing sticky max-md:static top-0">
+          <div className="col-span-full">
+            <div className="col-span-full mb-3 md:mb-8 flex flex-wrap items-center gap-2 text-xs uppercase text-muted-foreground">
+              <Link href="/productos">{breadcrumbLabel}</Link>
+              <span>/</span>
+              <span>{selectedProduct.name}</span>
             </div>
 
-            <div className="mt-4 grid gap-3 sm:grid-cols-3">
-              {tastingNotes.map((note) => (
-                <div
-                  key={note}
-                  className="rounded-[1.4rem] border border-white/70 bg-white/72 p-4 text-sm leading-6 text-muted-foreground"
+            <div className="flex flex-col gap-4 col-span-full mb-10 max-md:order-2">
+              <div className="rounded bg-card py-2 px-3 flex flex-col md:grid grid-cols-2 md:gap-x-4 md:gap-y-10 place-items-baseline">
+                <h1 className="text-lg lg:text-xl 2xl:text-2xl font-semibold text-balance max-md:mb-4 uppercase">
+                  {selectedProduct.name}
+                </h1>
+                <p className="text-sm font-medium">
+                  {selectedProduct.description ?? selectedProduct.fullDescription ?? selectedProduct.shortDescription}
+                </p>
+                {(selectedProduct.weightInfo || selectedProduct.portionInfo) && (
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground col-span-full">
+                    {selectedProduct.weightInfo ? (
+                      <span className="bg-secondary px-2 py-1 rounded">{selectedProduct.weightInfo}</span>
+                    ) : null}
+                    {selectedProduct.portionInfo ? (
+                      <span className="bg-secondary px-2 py-1 rounded">{selectedProduct.portionInfo}</span>
+                    ) : null}
+                    <span className="bg-secondary px-2 py-1 rounded capitalize">
+                      {selectedProduct.format === "tarta" ? "tarta" : "cajita"}
+                    </span>
+                  </div>
+                )}
+                <p className="text-lg lg:text-xl 2xl:text-2xl font-semibold max-md:mt-8">
+                  {selectedProduct.priceText}
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {sibling ? (
+                  <div className="flex items-center rounded-full border border-border bg-card p-1">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedProduct(product.format === "tarta" ? product : sibling)}
+                      className={`flex-1 rounded-full px-4 py-3 text-sm font-semibold transition-colors ${
+                        selectedProduct.format === "tarta"
+                          ? "bg-black text-white"
+                          : "text-muted-foreground"
+                      }`}
+                    >
+                      Tartas
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedProduct(product.format === "cajita" ? product : sibling)}
+                      className={`flex-1 rounded-full px-4 py-3 text-sm font-semibold transition-colors ${
+                        selectedProduct.format === "cajita"
+                          ? "bg-black text-white"
+                          : "text-muted-foreground"
+                      }`}
+                    >
+                      Cajitas
+                    </button>
+                  </div>
+                ) : (
+                  <div />
+                )}
+
+                <button
+                  type="button"
+                  className="inline-flex w-full items-center justify-center rounded-md bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground"
+                  onClick={() => addItem(selectedProduct, 1)}
                 >
-                  {note}
+                  Añadir al carrito
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="col-span-full max-md:order-3 max-md:mt-6 flex flex-col gap-4 mb-auto">
+            <div className="rounded bg-card p-3">
+              <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-3">
+                Ficha de producto
+              </h3>
+              <dl className="grid grid-cols-2 gap-x-4 gap-y-2">
+                <div className="contents">
+                  <dt className="text-xs text-muted-foreground">Formato</dt>
+                  <dd className="text-xs font-medium text-foreground">
+                    {selectedProduct.format === "tarta" ? "Tarta completa" : "Cajita individual"}
+                  </dd>
                 </div>
-              ))}
+                {selectedProduct.weightInfo ? (
+                  <div className="contents">
+                    <dt className="text-xs text-muted-foreground">Peso</dt>
+                    <dd className="text-xs font-medium text-foreground">{selectedProduct.weightInfo}</dd>
+                  </div>
+                ) : null}
+                {selectedProduct.portionInfo ? (
+                  <div className="contents">
+                    <dt className="text-xs text-muted-foreground">Raciones</dt>
+                    <dd className="text-xs font-medium text-foreground">{selectedProduct.portionInfo}</dd>
+                  </div>
+                ) : null}
+                <div className="contents">
+                  <dt className="text-xs text-muted-foreground">Conservación</dt>
+                  <dd className="text-xs font-medium text-foreground">Refrigerada entre 2-6 °C</dd>
+                </div>
+                <div className="contents">
+                  <dt className="text-xs text-muted-foreground">Consejo</dt>
+                  <dd className="text-xs font-medium text-foreground">Sacar 15 min antes de servir</dd>
+                </div>
+              </dl>
+            </div>
+
+            <div className="rounded bg-card p-3 text-sm font-medium opacity-70">
+              {selectedProduct.fullDescription ?? selectedProduct.shortDescription}
             </div>
           </div>
         </div>
 
-        <div className="space-y-6">
-          <div className="showcase-panel p-6 md:p-8 lg:p-10">
-            <p className="editorial-kicker">Colección Casa Bruna</p>
-            <h1 className="mt-4 font-display text-5xl leading-none text-foreground md:text-6xl xl:text-7xl">
-              {product.name}
-            </h1>
-            <p className="mt-5 max-w-3xl text-sm leading-8 text-muted-foreground md:text-base">
-              {product.description || product.fullDescription || product.shortDescription}
-            </p>
-
-            <div className="mt-6 flex flex-wrap gap-2">
-              {tastingNotes.map((note) => (
-                <span
-                  key={note}
-                  className="rounded-full bg-secondary px-3 py-1.5 text-xs font-medium text-foreground"
-                >
-                  {note}
-                </span>
-              ))}
-            </div>
-
-            <div className="mt-8 flex flex-col gap-4 rounded-[2rem] bg-[#211913] p-5 text-white md:flex-row md:items-center md:justify-between">
-              <div>
-                <p className="text-xs uppercase tracking-[0.24em] text-white/70">Precio demo</p>
-                <p className="mt-2 text-2xl font-semibold">{product.priceText}</p>
-              </div>
-              <div className="flex items-center rounded-full bg-white/8 p-1">
-                <button
-                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                  aria-label="Reducir cantidad"
-                  className="flex h-10 w-10 items-center justify-center rounded-full text-white transition-colors hover:bg-white/10"
-                >
-                  <Minus className="h-4 w-4" />
-                </button>
-                <span className="min-w-[3rem] text-center text-sm font-semibold">{quantity}</span>
-                <button
-                  onClick={() => setQuantity((q) => q + 1)}
-                  aria-label="Aumentar cantidad"
-                  className="flex h-10 w-10 items-center justify-center rounded-full text-white transition-colors hover:bg-white/10"
-                >
-                  <Plus className="h-4 w-4" />
-                </button>
-              </div>
-            </div>
-
-            <button
-              onClick={() => {
-                addItem(product, quantity)
-                setQuantity(1)
-              }}
-              className="mt-5 inline-flex w-full items-center justify-center rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5"
-            >
-              Añadir esta pieza al pedido
-            </button>
-          </div>
-
-          <div className="grid gap-6 lg:grid-cols-[0.92fr_1.08fr]">
-            <div className="paper-panel p-6 md:p-8">
-              <p className="editorial-kicker">Composición</p>
-              {product.allergens ? (
-                <div className="mt-4">
-                  <p className="text-sm leading-7 text-muted-foreground">
-                    <strong className="font-semibold text-foreground">Alérgenos confirmados:</strong>{" "}
-                    {product.allergens}
-                  </p>
-                  {allergenBadges.length > 0 ? (
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {allergenBadges.map((badge) => (
-                        <span
-                          key={badge.key}
-                          className="rounded-full border border-foreground/10 bg-white px-3 py-1.5 text-xs font-medium text-foreground"
-                        >
-                          {badge.label}
-                        </span>
-                      ))}
-                    </div>
-                  ) : null}
-                </div>
-              ) : (
-                <p className="mt-4 text-sm leading-7 text-muted-foreground">
-                  Esta pieza no muestra alérgenos detallados, pero mantiene la misma estructura de
-                  datos que el resto del catálogo.
-                </p>
-              )}
-
-              {product.ingredients?.length ? (
-                <div className="mt-6">
-                  <p className="editorial-kicker">Ingredientes base</p>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {product.ingredients.map((ingredient) => (
-                      <span
-                        key={ingredient}
-                        className="rounded-full bg-secondary px-3 py-1.5 text-xs font-medium text-foreground"
-                      >
-                        {ingredient}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ) : null}
-            </div>
-
-            <div className="paper-panel p-6 md:p-8">
-              <p className="editorial-kicker">Información adicional</p>
-              <Accordion type="single" collapsible className="mt-4 w-full">
-                <AccordionItem value="formatos">
-                  <AccordionTrigger className="text-sm font-semibold text-foreground">
-                    Formatos disponibles
-                  </AccordionTrigger>
-                  <AccordionContent className="text-sm leading-7 text-muted-foreground">
-                    <p><strong>Mesa:</strong> 1,8 kg y 10-12 raciones.</p>
-                    <p><strong>Petit:</strong> 450 g y 2-3 raciones.</p>
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="recogida">
-                  <AccordionTrigger className="text-sm font-semibold text-foreground">
-                    Recogida y conservación
-                  </AccordionTrigger>
-                  <AccordionContent className="text-sm leading-7 text-muted-foreground">
-                    {`${PICKUP_ONLY_COPY} Mantén la pieza refrigerada y sácala 15 minutos antes de servir.`}
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="demo">
-                  <AccordionTrigger className="text-sm font-semibold text-foreground">
-                    Nota de demo
-                  </AccordionTrigger>
-                  <AccordionContent className="text-sm leading-7 text-muted-foreground">
-                    Esta ficha mantiene la lógica de producto, rutas y carrito, pero el naming,
-                    los visuales y los textos pertenecen a una marca ficticia creada para portfolio.
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-            </div>
-          </div>
+        <div className="hidden md:block col-start-6 col-span-7 w-full overflow-y-auto relative">
+          {images.map((image, index) => (
+            <Image
+              key={`${image}-${index}`}
+              src={image}
+              alt={selectedProduct.name}
+              width={1600}
+              height={1200}
+              className="w-full object-cover"
+              quality={100}
+            />
+          ))}
         </div>
       </div>
-    </section>
+    </div>
   )
 }
