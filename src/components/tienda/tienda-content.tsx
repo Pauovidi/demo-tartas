@@ -7,11 +7,15 @@ export function TiendaContent() {
   const flavors = getFlavors()
 
   return (
-    <div className="grid gap-5 md:grid-cols-2">
-      {flavors.map((flavor) => {
+    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+      {flavors.map((flavor, index) => {
         const primaryProduct = flavor.cajita ?? flavor.tarta
         if (!primaryProduct) return null
-        return <ProductCard key={flavor.category} product={primaryProduct} />
+        return (
+          <div key={flavor.category} className={index === 0 ? "md:col-span-2 xl:col-span-2" : ""}>
+            <ProductCard product={primaryProduct} />
+          </div>
+        )
       })}
     </div>
   )

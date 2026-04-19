@@ -1,58 +1,62 @@
 "use client"
 
 import Link from "next/link"
+import { ArrowRight } from "lucide-react"
 
 import { getFlavors } from "@/src/data/products"
 import { ProductCard } from "@/src/components/product-card"
 
 export function FeaturedProducts() {
-  const flavors = getFlavors().slice(0, 4)
+  const flavors = getFlavors().slice(0, 5)
 
   return (
     <section id="coleccion" className="pb-20 pt-2 md:pb-28">
       <div className="page-shell">
-        <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-          <div>
-            <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">
-              Colección destacada
-            </p>
-            <h2 className="mt-3 font-display text-4xl leading-none text-foreground md:text-5xl">
-              Cuatro piezas para mostrar catálogo, ficha y compra.
+        <div className="mb-10 grid gap-6 xl:grid-cols-[0.76fr_1.24fr]">
+          <div className="paper-panel p-6 md:p-8">
+            <p className="editorial-kicker">Selección destacada</p>
+            <h2 className="mt-4 font-display text-4xl leading-none text-foreground md:text-5xl xl:text-6xl">
+              La home ya no presenta tarjetas sueltas: presenta una colección.
             </h2>
-          </div>
-          <p className="max-w-xl text-sm leading-7 text-muted-foreground md:text-right">
-            El catálogo mantiene la lógica original de sabores y formatos, pero la tarjeta, la
-            jerarquía y las microcopias cambian para que la experiencia se lea como otra marca.
-          </p>
-        </div>
-
-        <div className="grid gap-5 md:grid-cols-2">
-          {flavors.map((flavor, index) => {
-            const product = flavor.cajita ?? flavor.tarta
-            if (!product) return null
-
-            return (
-              <div
-                key={flavor.category}
-                className={index === 0 ? "md:col-span-2" : undefined}
-              >
-                <ProductCard product={product} priority={index < 2} />
+            <p className="mt-5 text-sm leading-7 text-muted-foreground md:text-base">
+              Este bloque toma la lógica de composición editorial de v0 y la traduce al dataset de
+              Casa Bruna, con cards más altas, overlays más limpios y un ritmo visual más premium.
+            </p>
+            <div className="mt-8 grid gap-3 sm:grid-cols-2">
+              <div className="rounded-[1.6rem] border border-foreground/10 bg-white/76 p-4">
+                <p className="editorial-kicker">Visual</p>
+                <p className="mt-3 text-sm leading-6 text-foreground">
+                  Proporciones más generosas, imagen dominante y tipografía de contraste.
+                </p>
               </div>
-            )
-          })}
-        </div>
+              <div className="rounded-[1.6rem] border border-foreground/10 bg-white/76 p-4">
+                <p className="editorial-kicker">Función</p>
+                <p className="mt-3 text-sm leading-6 text-foreground">
+                  Formato, ficha y add to cart siguen conectados al mismo estado del proyecto.
+                </p>
+              </div>
+            </div>
+            <Link
+              href="/productos"
+              className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-foreground transition-colors hover:text-accent"
+            >
+              Abrir catálogo completo
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
 
-        <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-sm leading-6 text-muted-foreground">
-            El resto de la colección conserva rutas y utilidades, pero con producto demo y assets
-            vectoriales propios.
-          </p>
-          <Link
-            href="/productos"
-            className="inline-flex items-center justify-center rounded-full bg-foreground px-6 py-3 text-sm font-semibold text-background transition-transform hover:-translate-y-0.5"
-          >
-            Ver catálogo completo
-          </Link>
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {flavors.map((flavor, index) => {
+              const product = flavor.cajita ?? flavor.tarta
+              if (!product) return null
+
+              return (
+                <div key={flavor.category} className={index === 0 ? "md:col-span-2 xl:col-span-2" : ""}>
+                  <ProductCard product={product} priority={index < 2} />
+                </div>
+              )
+            })}
+          </div>
         </div>
       </div>
     </section>

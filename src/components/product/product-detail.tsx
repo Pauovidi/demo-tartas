@@ -65,61 +65,73 @@ export function ProductDetail({ product }: ProductDetailProps) {
   ].filter(Boolean)
 
   return (
-    <section className="pb-16 pt-10 md:pb-24 md:pt-14">
-      <div className="page-shell grid gap-6 lg:grid-cols-[0.92fr_1.08fr]">
-        <div className="paper-panel overflow-hidden p-4 md:p-5">
-          <div className="relative aspect-square overflow-hidden rounded-[1.8rem] bg-secondary">
-            {product.images.length > 0 ? (
-              <Image
-                src={product.images[0]}
-                alt={product.name}
-                fill
-                className="object-cover"
-                priority
-              />
-            ) : (
-              <div className="flex h-full items-center justify-center p-8 text-center text-sm text-muted-foreground">
-                Imagen editorial en preparación
-              </div>
-            )}
-            <span className="absolute left-4 top-4 rounded-full bg-white/85 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-foreground">
-              {getCustomerFacingFormatLabel(product.format)}
-            </span>
+    <section className="pb-16 pt-8 md:pb-24 md:pt-10">
+      <div className="page-shell grid gap-6 xl:grid-cols-[0.88fr_1.12fr]">
+        <div className="xl:sticky xl:top-28">
+          <div className="showcase-panel overflow-hidden p-4 md:p-5">
+            <div className="relative aspect-[4/4.5] overflow-hidden rounded-[1.9rem] bg-secondary">
+              <div className="absolute inset-0 bg-gradient-to-t from-[#221a14]/18 via-transparent to-transparent" />
+              {product.images.length > 0 ? (
+                <Image
+                  src={product.images[0]}
+                  alt={product.name}
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              ) : (
+                <div className="flex h-full items-center justify-center p-8 text-center text-sm text-muted-foreground">
+                  Imagen editorial en preparación
+                </div>
+              )}
+              <span className="absolute left-4 top-4 rounded-full bg-white/85 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-foreground">
+                {getCustomerFacingFormatLabel(product.format)}
+              </span>
+
+              {hasBothFormats && (
+                <div className="absolute bottom-4 left-4 inline-flex rounded-full border border-white/30 bg-[#221a14]/75 p-1 backdrop-blur">
+                  <button
+                    onClick={() => switchFormat("tarta")}
+                    className={`rounded-full px-4 py-2 text-xs font-semibold transition-colors ${
+                      product.format === "tarta" ? "bg-white text-foreground" : "text-white/72"
+                    }`}
+                  >
+                    Mesa
+                  </button>
+                  <button
+                    onClick={() => switchFormat("cajita")}
+                    className={`rounded-full px-4 py-2 text-xs font-semibold transition-colors ${
+                      product.format === "cajita" ? "bg-white text-foreground" : "text-white/72"
+                    }`}
+                  >
+                    Petit
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <div className="mt-4 grid gap-3 sm:grid-cols-3">
+              {tastingNotes.map((note) => (
+                <div
+                  key={note}
+                  className="rounded-[1.4rem] border border-white/70 bg-white/72 p-4 text-sm leading-6 text-muted-foreground"
+                >
+                  {note}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
         <div className="space-y-6">
-          <div className="paper-panel p-6 md:p-8">
-            <p className="text-xs uppercase tracking-[0.26em] text-muted-foreground">
-              Colección Casa Bruna
-            </p>
-            <h1 className="mt-3 font-display text-5xl leading-none text-foreground md:text-6xl">
+          <div className="showcase-panel p-6 md:p-8 lg:p-10">
+            <p className="editorial-kicker">Colección Casa Bruna</p>
+            <h1 className="mt-4 font-display text-5xl leading-none text-foreground md:text-6xl xl:text-7xl">
               {product.name}
             </h1>
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-muted-foreground md:text-base">
+            <p className="mt-5 max-w-3xl text-sm leading-8 text-muted-foreground md:text-base">
               {product.description || product.fullDescription || product.shortDescription}
             </p>
-
-            {hasBothFormats && (
-              <div className="mt-6 inline-flex rounded-full border border-foreground/10 bg-white p-1">
-                <button
-                  onClick={() => switchFormat("tarta")}
-                  className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
-                    product.format === "tarta" ? "bg-foreground text-background" : "text-muted-foreground"
-                  }`}
-                >
-                  Mesa
-                </button>
-                <button
-                  onClick={() => switchFormat("cajita")}
-                  className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
-                    product.format === "cajita" ? "bg-foreground text-background" : "text-muted-foreground"
-                  }`}
-                >
-                  Petit
-                </button>
-              </div>
-            )}
 
             <div className="mt-6 flex flex-wrap gap-2">
               {tastingNotes.map((note) => (
@@ -132,7 +144,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
               ))}
             </div>
 
-            <div className="mt-8 flex flex-col gap-4 rounded-[1.8rem] bg-[#2e241f] p-5 text-white md:flex-row md:items-center md:justify-between">
+            <div className="mt-8 flex flex-col gap-4 rounded-[2rem] bg-[#211913] p-5 text-white md:flex-row md:items-center md:justify-between">
               <div>
                 <p className="text-xs uppercase tracking-[0.24em] text-white/70">Precio demo</p>
                 <p className="mt-2 text-2xl font-semibold">{product.priceText}</p>
@@ -167,33 +179,55 @@ export function ProductDetail({ product }: ProductDetailProps) {
             </button>
           </div>
 
-          <div className="paper-panel p-6 md:p-8">
-            {product.allergens ? (
-              <div>
-                <p className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
-                  Alergias y composición
+          <div className="grid gap-6 lg:grid-cols-[0.92fr_1.08fr]">
+            <div className="paper-panel p-6 md:p-8">
+              <p className="editorial-kicker">Composición</p>
+              {product.allergens ? (
+                <div className="mt-4">
+                  <p className="text-sm leading-7 text-muted-foreground">
+                    <strong className="font-semibold text-foreground">Alérgenos confirmados:</strong>{" "}
+                    {product.allergens}
+                  </p>
+                  {allergenBadges.length > 0 ? (
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {allergenBadges.map((badge) => (
+                        <span
+                          key={badge.key}
+                          className="rounded-full border border-foreground/10 bg-white px-3 py-1.5 text-xs font-medium text-foreground"
+                        >
+                          {badge.label}
+                        </span>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+              ) : (
+                <p className="mt-4 text-sm leading-7 text-muted-foreground">
+                  Esta pieza no muestra alérgenos detallados, pero mantiene la misma estructura de
+                  datos que el resto del catálogo.
                 </p>
-                <p className="mt-3 text-sm leading-7 text-muted-foreground">
-                  <strong className="font-semibold text-foreground">Alérgenos confirmados:</strong>{" "}
-                  {product.allergens}
-                </p>
-                {allergenBadges.length > 0 ? (
+              )}
+
+              {product.ingredients?.length ? (
+                <div className="mt-6">
+                  <p className="editorial-kicker">Ingredientes base</p>
                   <div className="mt-4 flex flex-wrap gap-2">
-                    {allergenBadges.map((badge) => (
+                    {product.ingredients.map((ingredient) => (
                       <span
-                        key={badge.key}
-                        className="rounded-full border border-foreground/10 bg-white px-3 py-1.5 text-xs font-medium text-foreground"
+                        key={ingredient}
+                        className="rounded-full bg-secondary px-3 py-1.5 text-xs font-medium text-foreground"
                       >
-                        {badge.label}
+                        {ingredient}
                       </span>
                     ))}
                   </div>
-                ) : null}
-              </div>
-            ) : null}
+                </div>
+              ) : null}
+            </div>
 
-            <div className={product.allergens ? "mt-8" : ""}>
-              <Accordion type="single" collapsible className="w-full">
+            <div className="paper-panel p-6 md:p-8">
+              <p className="editorial-kicker">Información adicional</p>
+              <Accordion type="single" collapsible className="mt-4 w-full">
                 <AccordionItem value="formatos">
                   <AccordionTrigger className="text-sm font-semibold text-foreground">
                     Formatos disponibles

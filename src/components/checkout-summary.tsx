@@ -59,10 +59,12 @@ export function CheckoutSummary({ leadDays, shopTimeZone }: CheckoutSummaryProps
 
   if (items.length === 0) {
     return (
-      <section className="pb-20 pt-12 md:pb-24 md:pt-16">
+      <section className="pb-20 pt-10 md:pb-24 md:pt-14">
         <div className="page-shell">
-          <div className="paper-panel flex flex-col items-center gap-6 py-14 text-center">
-            <p className="font-display text-4xl text-foreground">No hay piezas en el pedido.</p>
+          <div className="showcase-panel flex flex-col items-center gap-6 py-14 text-center">
+            <p className="font-display text-4xl text-foreground md:text-5xl">
+              No hay piezas en el pedido.
+            </p>
             <p className="max-w-lg text-sm leading-7 text-muted-foreground">
               Añade primero una selección desde catálogo para probar el flujo completo de checkout.
             </p>
@@ -159,24 +161,40 @@ export function CheckoutSummary({ leadDays, shopTimeZone }: CheckoutSummaryProps
   }
 
   return (
-    <section className="pb-20 pt-10 md:pb-24 md:pt-14">
-      <div className="page-shell grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+    <section className="pb-20 pt-8 md:pb-24 md:pt-10">
+      <div className="page-shell grid gap-6 xl:grid-cols-[0.96fr_1.04fr]">
         <div className="space-y-6">
-          <div className="paper-panel p-6 md:p-8">
-            <p className="text-xs uppercase tracking-[0.26em] text-muted-foreground">
-              Checkout demo
-            </p>
-            <h1 className="mt-3 font-display text-5xl leading-none text-foreground md:text-6xl">
+          <div className="showcase-panel p-6 md:p-8 lg:p-10">
+            <p className="editorial-kicker">Checkout demo</p>
+            <h1 className="mt-4 font-display text-5xl leading-none text-foreground md:text-6xl xl:text-7xl">
               Reserva tu selección
             </h1>
-            <p className="mt-4 text-sm leading-7 text-muted-foreground">
+            <p className="mt-5 max-w-2xl text-sm leading-8 text-muted-foreground">
               {BRAND_NAME} utiliza aquí el mismo flujo técnico de validación, carrito y creación de
               pedido, pero con marca, datos y copy ficticios.
             </p>
+            <div className="mt-8 grid gap-3 md:grid-cols-3">
+              <div className="rounded-[1.5rem] border border-white/75 bg-white/76 p-4">
+                <p className="editorial-kicker">Paso 1</p>
+                <p className="mt-3 text-sm leading-6 text-foreground">Revisa tu selección y datos.</p>
+              </div>
+              <div className="rounded-[1.5rem] border border-white/75 bg-white/76 p-4">
+                <p className="editorial-kicker">Paso 2</p>
+                <p className="mt-3 text-sm leading-6 text-foreground">
+                  Valida fecha con antelación mínima y días abiertos.
+                </p>
+              </div>
+              <div className="rounded-[1.5rem] border border-white/75 bg-white/76 p-4">
+                <p className="editorial-kicker">Paso 3</p>
+                <p className="mt-3 text-sm leading-6 text-foreground">
+                  Crea el pedido demo y limpia el carrito local.
+                </p>
+              </div>
+            </div>
           </div>
 
           <div className="paper-panel p-6 md:p-8">
-            <div className="grid gap-5">
+            <div className="grid gap-5 md:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="customer-name">Nombre *</Label>
                 <Input
@@ -196,7 +214,7 @@ export function CheckoutSummary({ leadDays, shopTimeZone }: CheckoutSummaryProps
                   placeholder="600 000 000"
                 />
               </div>
-              <div className="space-y-2">
+              <div className="space-y-2 md:col-span-2">
                 <Label htmlFor="delivery-date">Fecha de recogida *</Label>
                 <Input
                   id="delivery-date"
@@ -213,14 +231,23 @@ export function CheckoutSummary({ leadDays, shopTimeZone }: CheckoutSummaryProps
               </div>
             </div>
           </div>
+
+          <div className="grid gap-6 md:grid-cols-2">
+            <div className="paper-panel p-6">
+              <p className="editorial-kicker">Operativa</p>
+              <p className="mt-3 text-sm leading-7 text-muted-foreground">{pickupDateHelpText}</p>
+            </div>
+            <div className="paper-panel p-6">
+              <p className="editorial-kicker">Importante</p>
+              <p className="mt-3 text-sm leading-7 text-muted-foreground">{PICKUP_ONLY_COPY}</p>
+            </div>
+          </div>
         </div>
 
-        <div className="space-y-6">
-          <div className="paper-panel p-6 md:p-8">
+        <div className="space-y-6 xl:sticky xl:top-28 xl:self-start">
+          <div className="showcase-panel p-6 md:p-8">
             <div className="flex items-center justify-between">
-              <p className="text-xs uppercase tracking-[0.26em] text-muted-foreground">
-                Resumen del pedido
-              </p>
+              <p className="editorial-kicker">Resumen del pedido</p>
               <span className="rounded-full bg-secondary px-3 py-1 text-xs font-medium text-foreground">
                 {items.length} líneas
               </span>
@@ -230,7 +257,7 @@ export function CheckoutSummary({ leadDays, shopTimeZone }: CheckoutSummaryProps
               {items.map((item) => (
                 <div
                   key={item.product.id}
-                  className="rounded-[1.5rem] border border-foreground/10 bg-white/80 p-4"
+                  className="rounded-[1.6rem] border border-white/80 bg-white/82 p-4"
                 >
                   <div className="flex items-center justify-between gap-3">
                     <div>
@@ -263,7 +290,7 @@ export function CheckoutSummary({ leadDays, shopTimeZone }: CheckoutSummaryProps
           </div>
 
           <div className="paper-panel p-6 md:p-8">
-            <p className="text-xs uppercase tracking-[0.26em] text-primary">Nota importante</p>
+            <p className="editorial-kicker text-accent">Nota importante</p>
             <p className="mt-3 text-sm leading-7 text-muted-foreground">{PICKUP_ONLY_COPY}</p>
             <p className="mt-3 text-sm leading-7 text-muted-foreground">{DEMO_DISCLAIMER}</p>
           </div>

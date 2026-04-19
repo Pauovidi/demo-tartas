@@ -4,26 +4,26 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: #fbf5ef;
-  --foreground: #2e241f;
-  --card: #fffaf6;
-  --card-foreground: #2e241f;
-  --popover: #fffaf6;
-  --popover-foreground: #2e241f;
-  --primary: #bb6c4a;
-  --primary-foreground: #fff8f1;
-  --secondary: #efe1d2;
-  --secondary-foreground: #2e241f;
-  --muted: #f5ebe1;
-  --muted-foreground: #705f55;
-  --accent: #d8b186;
-  --accent-foreground: #2e241f;
+  --background: #f2eadf;
+  --foreground: #221a14;
+  --card: #fbf6ee;
+  --card-foreground: #221a14;
+  --popover: #fbf6ee;
+  --popover-foreground: #221a14;
+  --primary: #221a14;
+  --primary-foreground: #f8f1e7;
+  --secondary: #e7d7c1;
+  --secondary-foreground: #221a14;
+  --muted: #efe4d7;
+  --muted-foreground: #6b5b50;
+  --accent: #c99263;
+  --accent-foreground: #221a14;
   --destructive: #c23b32;
   --destructive-foreground: #fff8f1;
-  --border: #dbc6b4;
-  --input: #dbc6b4;
-  --ring: #bb6c4a;
-  --radius: 1.25rem;
+  --border: #d6c0aa;
+  --input: #d6c0aa;
+  --ring: #c99263;
+  --radius: 1.5rem;
 }
 
 @theme inline {
@@ -67,9 +67,11 @@
   body {
     @apply bg-background text-foreground;
     background-image:
-      radial-gradient(circle at top left, rgba(216, 177, 134, 0.24), transparent 36%),
-      radial-gradient(circle at 82% 14%, rgba(187, 108, 74, 0.12), transparent 24%),
-      linear-gradient(180deg, rgba(255, 250, 246, 0.75), rgba(251, 245, 239, 0.96));
+      radial-gradient(circle at top left, rgba(201, 146, 99, 0.18), transparent 28%),
+      radial-gradient(circle at 82% 16%, rgba(34, 26, 20, 0.08), transparent 20%),
+      radial-gradient(circle at 50% 100%, rgba(178, 132, 92, 0.14), transparent 30%),
+      linear-gradient(180deg, #f6efe5 0%, #f2eadf 48%, #efe4d7 100%);
+    min-height: 100vh;
   }
 
   ::selection {
@@ -83,14 +85,30 @@
   }
 
   .page-shell {
-    @apply mx-auto w-full max-w-[1240px] px-5 md:px-8 lg:px-10;
+    @apply mx-auto w-full max-w-[1380px] px-5 md:px-8 lg:px-10;
   }
 
   .paper-panel {
-    @apply rounded-[2rem] border border-white/60 bg-white/70 shadow-[0_20px_70px_-38px_rgba(46,36,31,0.55)] backdrop-blur;
+    @apply rounded-[2rem] border border-white/70 bg-[rgba(251,246,238,0.84)] shadow-[0_28px_90px_-52px_rgba(34,26,20,0.42)] backdrop-blur;
   }
 
   .soft-divider {
-    background: linear-gradient(90deg, transparent, rgba(112, 95, 85, 0.28), transparent);
+    background: linear-gradient(90deg, transparent, rgba(107, 91, 80, 0.26), transparent);
+  }
+
+  .editorial-kicker {
+    @apply text-[11px] font-semibold uppercase tracking-[0.3em] text-muted-foreground;
+  }
+
+  .editorial-title {
+    @apply font-display text-5xl leading-none text-foreground md:text-6xl lg:text-7xl;
+  }
+
+  .showcase-panel {
+    @apply rounded-[2.2rem] border border-white/70 bg-[linear-gradient(180deg,rgba(255,252,248,0.94),rgba(248,238,227,0.86))] shadow-[0_32px_100px_-58px_rgba(34,26,20,0.48)];
+  }
+
+  .glass-pill {
+    @apply rounded-full border border-white/75 bg-white/65 backdrop-blur;
   }
 }
