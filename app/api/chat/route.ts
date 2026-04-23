@@ -26,7 +26,14 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ ok: true, reply: result.text, external_id: externalId })
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Error interno"
-    return NextResponse.json({ ok: false, error: message }, { status: 500 })
+    console.error({
+      where: "/api/chat",
+      error: error instanceof Error ? error.message : error,
+    })
+
+    return NextResponse.json(
+      { ok: false, error: "No pude responder ahora mismo. Inténtalo de nuevo en unos segundos." },
+      { status: 500 }
+    )
   }
 }

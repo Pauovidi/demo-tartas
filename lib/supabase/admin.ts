@@ -2,13 +2,17 @@ import { createClient } from "@supabase/supabase-js"
 
 let cachedAdminUid: string | null = null
 
-export function getAdminClient() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const serviceRole = process.env.SUPABASE_SERVICE_ROLE_KEY
+export function hasServerSupabaseConfig() {
+  return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY)
+}
 
-  if (!supabaseUrl || !serviceRole) {
+export function getAdminClient() {
+  if (!hasServerSupabaseConfig()) {
     throw new Error("Faltan variables SUPABASE para server")
   }
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+  const serviceRole = process.env.SUPABASE_SERVICE_ROLE_KEY!
 
   return createClient(supabaseUrl, serviceRole, {
     auth: {

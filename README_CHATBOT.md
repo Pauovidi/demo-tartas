@@ -15,7 +15,8 @@ FAQ, launcher, chatbot y metadatos reutilizan esta misma fuente.
 ## Qué hace el chatbot
 
 - Responde en español sobre sabores, formatos, precios, horarios y reservas.
-- Mantiene memoria persistente en Supabase.
+- Si hay Supabase configurado, mantiene memoria persistente allí.
+- Si faltan variables de Supabase, funciona en modo demo con memoria efímera en servidor y pedidos simulados no persistentes.
 - Deriva a atención humana demo si falta un dato confirmado o si el usuario lo pide.
 - Reutiliza el mismo motor en web y WhatsApp.
 

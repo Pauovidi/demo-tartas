@@ -1,12 +1,27 @@
 import "server-only"
 
-import { getAdminClient } from "@/lib/supabase/admin"
+import {
+  clearDemoConversationState,
+  getDemoChatPauseState,
+  getOrCreateDemoChatUser,
+  loadDemoChatContext,
+  pruneDemoChatMessages,
+  saveDemoChatMessage,
+  setDemoChatLastOpenAIResponseId,
+  setDemoChatPauseState,
+  updateDemoChatSummary,
+} from "@/lib/chatbot/demo-store"
+import { getAdminClient, hasServerSupabaseConfig } from "@/lib/supabase/admin"
 
 type Channel = "web" | "whatsapp"
 
 type MessageRole = "user" | "assistant" | "system"
 
 export async function getOrCreateUser(input: { channel: Channel; externalId: string; phone?: string }) {
+  if (!hasServerSupabaseConfig()) {
+    return getOrCreateDemoChatUser(input)
+  }
+
   const supabase = getAdminClient()
 
   const { data: existing, error: lookupError } = await supabase
@@ -44,6 +59,10 @@ export async function getOrCreateUser(input: { channel: Channel; externalId: str
 }
 
 export async function loadContext(userId: string) {
+  if (!hasServerSupabaseConfig()) {
+    return loadDemoChatContext(userId)
+  }
+
   const supabase = getAdminClient()
 
   const [{ data: state, error: stateError }, { data: messages, error: messagesError }] = await Promise.all([
@@ -66,18 +85,32 @@ export async function loadContext(userId: string) {
 }
 
 export async function saveMessage(userId: string, role: MessageRole, content: string) {
+  if (!hasServerSupabaseConfig()) {
+    saveDemoChatMessage(userId, role, content)
+    return
+  }
+
   const supabase = getAdminClient()
   const { error } = await supabase.from("chat_messages").insert({ user_id: userId, role, content })
   if (error) throw new Error(error.message)
 }
 
 export async function updateSummary(userId: string, summary: string) {
+  if (!hasServerSupabaseConfig()) {
+    updateDemoChatSummary(userId, summary)
+    return
+  }
+
   const supabase = getAdminClient()
   const { error } = await supabase.from("chat_user_state").upsert({ user_id: userId, summary }, { onConflict: "user_id" })
   if (error) throw new Error(error.message)
 }
 
 export async function getPauseState(userId: string) {
+  if (!hasServerSupabaseConfig()) {
+    return getDemoChatPauseState(userId)
+  }
+
   const supabase = getAdminClient()
   const { data, error } = await supabase
     .from("chat_user_state")
@@ -91,6 +124,11 @@ export async function getPauseState(userId: string) {
 }
 
 export async function setPauseState(userId: string, untilIso: string) {
+  if (!hasServerSupabaseConfig()) {
+    setDemoChatPauseState(userId, untilIso)
+    return
+  }
+
   const supabase = getAdminClient()
   const { error } = await supabase
     .from("chat_user_state")
@@ -100,6 +138,11 @@ export async function setPauseState(userId: string, untilIso: string) {
 }
 
 export async function setLastOpenAIResponseId(userId: string, responseId: string) {
+  if (!hasServerSupabaseConfig()) {
+    setDemoChatLastOpenAIResponseId(userId, responseId)
+    return
+  }
+
   const supabase = getAdminClient()
   const { error } = await supabase
     .from("chat_user_state")
@@ -109,6 +152,11 @@ export async function setLastOpenAIResponseId(userId: string, responseId: string
 }
 
 export async function pruneMessages(userId: string, keepLast = 20) {
+  if (!hasServerSupabaseConfig()) {
+    pruneDemoChatMessages(userId, keepLast)
+    return
+  }
+
   const supabase = getAdminClient()
   const { data, error } = await supabase
     .from("chat_messages")
@@ -127,6 +175,11 @@ export async function pruneMessages(userId: string, keepLast = 20) {
 }
 
 export async function clearConversationState(userId: string) {
+  if (!hasServerSupabaseConfig()) {
+    clearDemoConversationState(userId)
+    return
+  }
+
   const supabase = getAdminClient()
 
   const [{ error: messagesError }, { error: stateError }] = await Promise.all([

@@ -2,10 +2,11 @@ import "server-only"
 
 import { z } from "zod"
 
+import { cancelDemoOrder, createDemoOrder, findLatestDemoOrderByPhone } from "@/lib/chatbot/demo-store"
 import { isKnownFlavor } from "@/lib/chatbot/products"
 import { computeReminderAt } from "@/lib/chatbot/reminders"
 import { getOrderPickupDateErrorMessage, validateOrderPickupDate } from "@/lib/pickup-date-validation"
-import { getAdminClient, getAdminUid } from "@/lib/supabase/admin"
+import { getAdminClient, getAdminUid, hasServerSupabaseConfig } from "@/lib/supabase/admin"
 
 const LEAD_DAYS_RAW = Number.parseInt(process.env.CHATBOT_LEAD_DAYS ?? "3", 10)
 const LEAD_DAYS = Number.isFinite(LEAD_DAYS_RAW) && LEAD_DAYS_RAW > 0 ? LEAD_DAYS_RAW : 3
@@ -64,14 +65,29 @@ export async function createChatOrder(input: unknown) {
     }
   }
 
-  const adminUid = await getAdminUid()
-  const supabase = getAdminClient()
   const deliveryDateFinal = deliveryDateValidation.pickupDate
   const reminderAt = computeReminderAt({
     createdAt,
     deliveryDate: deliveryDateFinal,
     usedDefaultDeliveryDate: false,
   })
+
+  if (!hasServerSupabaseConfig()) {
+    const order = createDemoOrder({
+      customerName: payload.customer_name,
+      customerEmail: payload.customer_email,
+      phone: payload.phone,
+      deliveryDate: deliveryDateFinal,
+      notes: payload.notes,
+      items: payload.items,
+      reminderAt,
+    })
+
+    return { ok: true as const, orderId: order.id, deliveryDate: deliveryDateFinal, reminderAt }
+  }
+
+  const adminUid = await getAdminUid()
+  const supabase = getAdminClient()
 
   const { data: order, error: orderError } = await supabase
     .from("orders")
@@ -109,6 +125,20 @@ export async function createChatOrder(input: unknown) {
 }
 
 export async function cancelChatOrder(phone: string, hint?: string) {
+  if (!hasServerSupabaseConfig()) {
+    const order = findLatestDemoOrderByPhone(phone)
+    if (!order || order.status === "cancelled") {
+      return { ok: false as const, error: "No encontré un pedido activo para ese teléfono.", shouldHandoff: true }
+    }
+
+    if (hint?.trim() && !order.id.toLowerCase().startsWith(hint.trim().toLowerCase())) {
+      return { ok: false as const, error: "No encontré un pedido activo para ese teléfono.", shouldHandoff: true }
+    }
+
+    cancelDemoOrder(order.id)
+    return { ok: true as const, orderId: order.id }
+  }
+
   const supabase = getAdminClient()
   const normalizedPhone = normalizePhone(phone)
 
