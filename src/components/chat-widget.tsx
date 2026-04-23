@@ -10,10 +10,10 @@ import { WELCOME_MESSAGE } from "@/lib/chatbot/welcome"
 type ChatMessage = { role: "user" | "assistant"; text: string }
 
 const QUICK_ACTIONS = [
-  "¿Qué formatos hay?",
-  "Enséñame sabores",
-  "Quiero hacer una reserva",
+  "¿Qué sabores y tamaños hay?",
   "¿Cuál es el horario?",
+  "Quiero hacer un pedido",
+  "Quiero hablar con una persona",
 ]
 
 function getInitialMessages(): ChatMessage[] {

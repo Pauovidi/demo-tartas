@@ -7,6 +7,14 @@ function normalize(value: string) {
   return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim()
 }
 
+function stripNonFlavorTerms(query: string) {
+  return normalize(query)
+    .replace(/\b(quiero|pedido|encargar|para|una|un|de|la|el|por|favor|mesa|grande|tarta|cajita|caja|petit|pequena|pequeña|pequeno|pequeño|mini|individual)\b/g, " ")
+    .replace(/[^\p{L}\s-]/gu, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+}
+
 function detectRequestedFormat(query: string): Product["format"] | undefined {
   const normalized = normalize(query)
   if (/\b(cajita|petit|mini|individual)\b/.test(normalized)) return "cajita"
@@ -15,7 +23,7 @@ function detectRequestedFormat(query: string): Product["format"] | undefined {
 }
 
 function scoreFlavorMatch(query: string, product: Product) {
-  const normalizedQuery = normalize(query)
+  const normalizedQuery = stripNonFlavorTerms(query)
   const fields = [product.slug, product.name, product.category].map(normalize)
   const haystack = fields.join(" ")
 
@@ -26,6 +34,10 @@ function scoreFlavorMatch(query: string, product: Product) {
   const tokens = normalizedQuery.split(/\s+/).filter((token) => token.length >= 3)
   if (tokens.length && tokens.every((token) => haystack.includes(token))) {
     return 60
+  }
+
+  if (tokens.some((token) => token.length >= 4 && haystack.includes(token))) {
+    return 55
   }
 
   return 0
@@ -54,9 +66,12 @@ export function findProductBySlugOrFlavor(q: string) {
   const exactSlug = getProductBySlug(q)
   if (exactSlug) return exactSlug
 
+  const searchableQuery = stripNonFlavorTerms(q)
+  if (!searchableQuery) return undefined
+
   const requestedFormat = detectRequestedFormat(q)
   const bestProduct = products
-    .map((product) => ({ product, score: scoreFlavorMatch(q, product) }))
+    .map((product) => ({ product, score: scoreFlavorMatch(searchableQuery, product) }))
     .filter((entry) => entry.score > 0)
     .sort((a, b) => b.score - a.score || Number(Boolean(b.product.allergens)) - Number(Boolean(a.product.allergens)))[0]?.product
 
@@ -66,6 +81,24 @@ export function findProductBySlugOrFlavor(q: string) {
   }
 
   return getProductsByCategory(bestProduct.category).find((product) => Boolean(product.allergens)) ?? bestProduct
+}
+
+export function findExplicitFlavorSelection(query: string) {
+  const searchableQuery = stripNonFlavorTerms(query)
+  if (!searchableQuery) return undefined
+
+  const normalizedQuery = normalize(searchableQuery)
+  const flavors = getFlavors()
+  const exactFlavor = flavors.find(
+    (flavor) =>
+      normalize(flavor.category) === normalizedQuery ||
+      normalize(flavor.label) === normalizedQuery
+  )
+
+  if (!exactFlavor) return undefined
+
+  const flavorProducts = getProductsByCategory(exactFlavor.category)
+  return flavorProducts.find((product) => Boolean(product.allergens)) ?? flavorProducts[0]
 }
 
 export function findFlavorFactsByQuery(q: string) {

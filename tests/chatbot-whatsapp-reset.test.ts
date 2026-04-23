@@ -1,7 +1,7 @@
 import test from "node:test"
 import assert from "node:assert/strict"
 
-import { isWhatsappConversationResetCommand } from "../lib/chatbot/commands"
+import { hasCancelOrderHandoffIntent, isWhatsappConversationResetCommand } from "../lib/chatbot/commands"
 import {
   HUMAN_SUPPORT_PHONE_DISPLAY,
   buildHumanSupportMessage,
@@ -18,6 +18,11 @@ test("acepta 'reset' como comando de reset en WhatsApp", () => {
 
 test("acepta 'empezar de nuevo' como comando de reset en WhatsApp", () => {
   assert.equal(isWhatsappConversationResetCommand("whatsapp", "empezar de nuevo"), true)
+})
+
+test("no trata cancelar pedido como reset de conversación en WhatsApp", () => {
+  assert.equal(isWhatsappConversationResetCommand("whatsapp", "cancelar pedido"), false)
+  assert.equal(hasCancelOrderHandoffIntent("cancelar pedido"), true)
 })
 
 test("el handoff en WhatsApp no incluye wa.me", () => {
